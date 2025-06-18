@@ -1,0 +1,135 @@
+{
+  "deploymentSummary": {
+    "project": "Chain Academy V2",
+    "targetNetwork": "Sepolia Testnet",
+    "status": "READY_FOR_DEPLOY",
+    "timestamp": "2025-06-15T23:33:00.286Z",
+    "agent": "AGENT 2"
+  },
+  "compilationStatus": {
+    "status": "SUCCESS",
+    "contracts": [
+      "ProgressiveEscrowV3.sol",
+      "Mentorship.sol", 
+      "MentorshipFactory.sol",
+      "MockERC20.sol"
+    ],
+    "warnings": [
+      "Unused function parameter in ProgressiveEscrowV3.sol:344 (feedback parameter)"
+    ]
+  },
+  "localTestDeploy": {
+    "status": "SUCCESS",
+    "network": "hardhat-local",
+    "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "deployedContracts": {
+      "mockUSDT": {
+        "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        "txHash": "0x02d372db0407016c3f9f49b4310d915636571a68f94668e9494a8907420e5a9a",
+        "name": "Test Tether USD",
+        "symbol": "USDT",
+        "decimals": 6
+      },
+      "mockUSDC": {
+        "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+        "txHash": "0x75516927cf0f8ef82bac0e2743fa817f19cb62d3bb6ab36d7e3d9e06998ae304",
+        "name": "Test USD Coin", 
+        "symbol": "USDC",
+        "decimals": 6
+      },
+      "progressiveEscrowV3": {
+        "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0", 
+        "txHash": "0x48cdfdcaa22329c0cceb5f72b59a6f6bf99335f1b393dac2e0f5475e01d9a3a3",
+        "platformWallet": "0x85Fa7c0482F3e965099B8B564511c1D0f5e2b20c",
+        "platformFeePercent": 10
+      },
+      "mentorship": {
+        "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+        "txHash": "0xf2948db4a3f9b65289c4cf361617ac912d55d6abacc7e5ca2f7477563732971f",
+        "platformFeeRecipient": "0x85Fa7c0482F3e965099B8B564511c1D0f5e2b20c",
+        "platformFeePercentage": 10
+      },
+      "mentorshipFactory": {
+        "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+        "txHash": "0xe1308ac485fc106286c86eada1afc3672e6267622b2ed39308de9952711685e1"
+      }
+    },
+    "configurations": {
+      "tokensAdded": {
+        "mentorship": ["USDT", "USDC"],
+        "progressiveEscrow": ["USDT", "USDC"]
+      },
+      "platformFee": "10%",
+      "platformWallet": "0x85Fa7c0482F3e965099B8B564511c1D0f5e2b20c"
+    }
+  },
+  "sepoliaDeployment": {
+    "status": "PENDING_FUNDS",
+    "reason": "Insufficient ETH balance for deployment",
+    "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "currentBalance": "0.000000000000000005 ETH",
+    "requiredBalance": "0.01 ETH minimum",
+    "faucets": [
+      "https://sepoliafaucet.com/",
+      "https://sepoliafaucet.net/", 
+      "https://faucet.quicknode.com/ethereum/sepolia"
+    ]
+  },
+  "deploymentScripts": {
+    "main": "/home/mathewsl/Chain Academy V2/contracts/scripts/deploy-sepolia.js",
+    "balanceCheck": "/home/mathewsl/Chain Academy V2/contracts/scripts/check-sepolia-balance.js",
+    "packageScripts": {
+      "deploy": "npm run deploy:sepolia-v2",
+      "checkBalance": "npm run check:sepolia-balance", 
+      "localTest": "npm run deploy:local-test"
+    }
+  },
+  "networkConfiguration": {
+    "sepolia": {
+      "chainId": 11155111,
+      "rpcUrl": "https://ethereum-sepolia.publicnode.com",
+      "explorer": "https://sepolia.etherscan.io/",
+      "timeout": 120000,
+      "gasPrice": "auto"
+    }
+  },
+  "contractsReadyForDeploy": [
+    {
+      "name": "MockERC20",
+      "file": "contracts/MockERC20.sol",
+      "purpose": "Test USDT and USDC tokens",
+      "constructor": ["name", "symbol", "decimals"]
+    },
+    {
+      "name": "ProgressiveEscrowV3", 
+      "file": "contracts/ProgressiveEscrowV3.sol",
+      "purpose": "Progressive escrow system",
+      "constructor": ["platform wallet address"]
+    },
+    {
+      "name": "Mentorship",
+      "file": "contracts/Mentorship.sol", 
+      "purpose": "Main mentorship contract",
+      "constructor": ["platform fee recipient"]
+    },
+    {
+      "name": "MentorshipFactory",
+      "file": "contracts/MentorshipFactory.sol",
+      "purpose": "Factory for creating mentorships", 
+      "constructor": []
+    }
+  ],
+  "nextSteps": [
+    "1. Get test ETH from Sepolia faucets",
+    "2. Run balance check: npm run check:sepolia-balance", 
+    "3. Deploy to Sepolia: npm run deploy:sepolia-v2",
+    "4. Verify contracts on Etherscan",
+    "5. Update frontend with contract addresses",
+    "6. Run integration tests"
+  ],
+  "commands": {
+    "checkBalance": "PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 npm run check:sepolia-balance",
+    "deploy": "PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 npm run deploy:sepolia-v2",
+    "localTest": "npm run deploy:local-test"
+  }
+}

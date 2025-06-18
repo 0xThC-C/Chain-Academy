@@ -1,0 +1,23 @@
+Nothing to compile
+Deploying to network: hardhat (Chain ID: 31337)
+Platform Fee Recipient: 0x85Fa7c0482F3e965099B8B564511c1D0f5e2b20c
+deploying "Mentorship" (tx: 0x7fdeb5a755b1f9d7b50646424d9e3fa1d673ecebe4aa799dc3073c03411a9a2e)...: deployed at 0x5FbDB2315678afecb367f032d93F642f64180aa3 with 1137602 gas
+Mentorship contract deployed at: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+Deployment completed!
+
+🔒 Deploying MentorshipEscrowV2 to network: hardhat (Chain ID: 31337)
+Platform Wallet: 0x85Fa7c0482F3e965099B8B564511c1D0f5e2b20c
+Error HH604: Error running JSON-RPC server: ERROR processing /home/mathewsl/Chain Academy V2/contracts/deploy/02_deploy_escrow.js:
+Error: cannot find artifact "MentorshipEscrowV2"
+    at getArtifact (/home/mathewsl/Chain Academy V2/contracts/node_modules/hardhat-deploy/src/DeploymentsManager.ts:208:17)
+    at getArtifactFromOptions (/home/mathewsl/Chain Academy V2/contracts/node_modules/hardhat-deploy/src/helpers.ts:495:18)
+    at getLinkedArtifact (/home/mathewsl/Chain Academy V2/contracts/node_modules/hardhat-deploy/src/helpers.ts:505:38)
+    at fetchIfDifferent (/home/mathewsl/Chain Academy V2/contracts/node_modules/hardhat-deploy/src/helpers.ts:839:40)
+    at _deployOne (/home/mathewsl/Chain Academy V2/contracts/node_modules/hardhat-deploy/src/helpers.ts:917:24)
+    at Object.module.exports [as func] (/home/mathewsl/Chain Academy V2/contracts/deploy/02_deploy_escrow.js:16:28)
+    at DeploymentsManager.executeDeployScripts (/home/mathewsl/Chain Academy V2/contracts/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1212:22)
+    at DeploymentsManager.runDeploy (/home/mathewsl/Chain Academy V2/contracts/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1061:5)
+    at SimpleTaskDefinition.action (/home/mathewsl/Chain Academy V2/contracts/node_modules/hardhat-deploy/src/index.ts:450:5)
+    at Environment._runTaskDefinition (/home/mathewsl/Chain Academy V2/contracts/node_modules/hardhat/src/internal/core/runtime-environment.ts:351:14)
+
+For more info go to https://hardhat.org/HH604 or run Hardhat with --show-stack-traces

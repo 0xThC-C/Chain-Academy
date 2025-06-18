@@ -1,0 +1,25 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "deployer": "0x527162328cb3072c31Ad853dE00C799A64658951",
+  "platformFeeRecipient": "0x527162328cb3072c31Ad853dE00C799A64658951",
+  "timestamp": "2025-06-16T00:45:00.000Z",
+  "contracts": {
+    "MockUSDT": "0x6D64e4bE5e47d3445F8B6ef5Ed93a2852c19d085",
+    "MockUSDC": "0x556C875376950B70E0b5A670c9f15885093002B9",
+    "Mentorship": "0x409C486D1A686e9499E9561bFf82781843598eDF",
+    "ProgressiveEscrowV4": "0x4f9D0F7285858C439BEFfb4F4b481CC4DE57a67f"
+  },
+  "features": {
+    "ethSupport": true,
+    "tokenSupport": ["ETH", "USDT", "USDC"],
+    "progressivePayments": true,
+    "platformFee": "10%"
+  },
+  "verification": {
+    "Mentorship": "https://sepolia.etherscan.io/address/0x409C486D1A686e9499E9561bFf82781843598eDF",
+    "ProgressiveEscrowV4": "https://sepolia.etherscan.io/address/0x4f9D0F7285858C439BEFfb4F4b481CC4DE57a67f",
+    "MockUSDT": "https://sepolia.etherscan.io/address/0x6D64e4bE5e47d3445F8B6ef5Ed93a2852c19d085",
+    "MockUSDC": "https://sepolia.etherscan.io/address/0x556C875376950B70E0b5A670c9f15885093002B9"
+  }
+}

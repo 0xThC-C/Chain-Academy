@@ -1,0 +1,74 @@
+/* CSS to hide Phantom wallet from all possible UI locations */
+
+/* Hide by wallet ID and data attributes */
+[data-wallet*="phantom" i],
+[data-wallet-id*="phantom" i],
+[data-testid*="phantom" i],
+button[name*="phantom" i],
+button[data-wallet*="phantom" i] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Hide AppKit wallet buttons */
+w3m-wallet-button[name*="phantom" i],
+w3m-wallet-button[walletId*="phantom" i] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Hide by ID and class */
+*[id*="phantom" i],
+*[class*="phantom" i] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Hide images with phantom in alt or src */
+img[alt*="phantom" i],
+img[src*="phantom" i] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Hide any text containing "phantom" */
+*:has-text("phantom" i),
+*:has-text("Phantom" i) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* AppKit specific selectors */
+w3m-modal *[data-wallet*="phantom" i],
+w3m-modal button:has(*:contains("phantom" i)),
+w3m-modal button:has(*:contains("Phantom" i)) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Generic wallet list item hiding */
+.wallet-option:has(*:contains("phantom" i)),
+.wallet-option:has(*:contains("Phantom" i)),
+li:has(*:contains("phantom" i)),
+li:has(*:contains("Phantom" i)) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Force hide any element that might contain phantom */
+button:has(img[alt*="phantom" i]),
+button:has(img[src*="phantom" i]),
+div:has(img[alt*="phantom" i]),
+div:has(img[src*="phantom" i]) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}

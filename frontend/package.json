@@ -1,0 +1,142 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@modelcontextprotocol/sdk": "^1.12.3",
+    "@web3modal/wagmi": "^4.2.3",
+    "@smithery/sdk": "^1.5.2",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tanstack/react-query": "^5.80.7",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/dompurify": "^3.0.5",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.126",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@types/react-router-dom": "^5.3.3",
+    "ajv": "^8.17.1",
+    "autoprefixer": "^10.4.21",
+    "clsx": "^2.1.1",
+    "dompurify": "^3.2.6",
+    "ethers": "^6.13.4",
+    "http-proxy-middleware": "^2.0.9",
+    "postcss": "^8.4.35",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2",
+    "react-scripts": "^5.0.1",
+    "socket.io-client": "^4.8.1",
+    "tailwindcss": "^3.4.1",
+    "viem": "^2.31.2",
+    "wagmi": "^2.12.17",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "prestart": "node -e \"console.log('[Chain Academy] Initializing with protection system enabled...')\"",
+    "start": "craco start",
+    "start:vite": "vite --config vite.config.ts",
+    "build": "craco build",
+    "build:vite": "tsc && vite build --config vite.config.ts",
+    "build:analyze": "ANALYZE=true npm run build",
+    "preview": "vite preview --config vite.config.ts",
+    "test": "craco test",
+    "test:vitest": "vitest",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui",
+    "eject": "react-scripts eject",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
+    "lint:check": "eslint src --ext .ts,.tsx,.js,.jsx --max-warnings 0",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
+    "prepare": "husky install",
+    "dev:tools": "npm run type-check && npm run lint && npm run format:check",
+    "pre-commit": "lint-staged",
+    "clean": "rm -rf build dist .craco coverage",
+    "clean:deps": "rm -rf node_modules package-lock.json && npm install",
+    "deps:check": "npm outdated",
+    "deps:update": "npm update",
+    "deps:audit": "npm audit",
+    "deps:audit:fix": "npm audit fix",
+    "security:check": "npm audit --audit-level moderate",
+    "security:validate": "node scripts/security-check.js",
+    "security:csp": "node scripts/generate-csp-nonce.js",
+    "setup:verify": "node scripts/verify-setup.js",
+    "build:secure": "npm run security:check && npm run build",
+    "update-contracts": "node scripts/update-contracts.js",
+    "update-contracts:help": "node scripts/update-contracts.js --help",
+    "testnet:validate": "npm run type-check && npm run build",
+    "testnet:deploy": "npm run testnet:validate && echo 'Frontend ready for testnet deployment'",
+    "postinstall": "patch-package"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "overrides": {
+    "nth-check": "^2.1.1",
+    "postcss": "^8.4.35",
+    "webpack-dev-server": "^5.2.2",
+    "svgo": "^3.0.0",
+    "css-select": "^5.1.0",
+    "@svgr/webpack": "^8.0.0",
+    "@svgr/plugin-svgo": "^8.0.0",
+    "resolve-url-loader": "^5.0.0"
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "@eslint/js": "^9.17.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@types/eslint": "^9.6.1",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.13.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "patch-package": "^8.0.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.6.3",
+    "vite": "^6.1.7",
+    "vitest": "^3.2.3"
+  }
+}

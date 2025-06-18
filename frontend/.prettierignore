@@ -1,0 +1,47 @@
+# Build outputs
+build/
+dist/
+coverage/
+.next/
+out/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.tsbuildinfo
+*.d.ts.map
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+*.log
+
+# Cache
+.cache/
+.vite/
+.eslintcache
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env*
+
+# Contracts artifacts
+artifacts/
+cache/
+typechain-types/
+
+# Config files that should maintain their formatting
+craco.config.js
+tailwind.config.js
+postcss.config.js

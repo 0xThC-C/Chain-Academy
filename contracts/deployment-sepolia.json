@@ -1,0 +1,19 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "deployer": "0x527162328cb3072c31Ad853dE00C799A64658951",
+  "platformFeeRecipient": "0x85Fa7c0482F3e965099B8B564511c1D0f5e2b20c",
+  "timestamp": "2025-06-16T00:35:16.867Z",
+  "contracts": {
+    "MockUSDT": "0x6D64e4bE5e47d3445F8B6ef5Ed93a2852c19d085",
+    "MockUSDC": "0x556C875376950B70E0b5A670c9f15885093002B9",
+    "ProgressiveEscrowV3": "0xa161C5F6B18120269c279D31A7FEcAFb86c737EC",
+    "Mentorship": "0x409C486D1A686e9499E9561bFf82781843598eDF"
+  },
+  "verification": {
+    "ProgressiveEscrow": "https://sepolia.etherscan.io/address/0xa161C5F6B18120269c279D31A7FEcAFb86c737EC",
+    "Mentorship": "https://sepolia.etherscan.io/address/0x409C486D1A686e9499E9561bFf82781843598eDF",
+    "MockUSDT": "https://sepolia.etherscan.io/address/0x6D64e4bE5e47d3445F8B6ef5Ed93a2852c19d085",
+    "MockUSDC": "https://sepolia.etherscan.io/address/0x556C875376950B70E0b5A670c9f15885093002B9"
+  }
+}

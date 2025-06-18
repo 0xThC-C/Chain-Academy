@@ -1,0 +1,53 @@
+# Dependencies
+  node_modules/
+  */node_modules/
+
+  # Build outputs
+  build/
+  dist/
+  .next/
+
+  # Environment files
+  .env
+  .env.local
+  .env.production
+  .env.test
+
+  # Logs
+  *.log
+  logs/
+
+  # OS generated files
+  .DS_Store
+  Thumbs.db
+
+  # IDE files
+  .vscode/
+  .idea/
+
+  # Hardhat files
+  cache/
+  artifacts/
+  deployments/localhost/
+
+  # Coverage
+  coverage/
+  
+  # Dependencies
+  node_modules/
+  */node_modules/
+  **/node_modules/
+
+  # Build files
+  cache/
+  artifacts/
+  build/
+  dist/
+
+  # Environment files  
+  .env
+  .env.local
+
+  # Hardhat/Blockchain
+  deployments/localhost/
+  hardhat-node.log
