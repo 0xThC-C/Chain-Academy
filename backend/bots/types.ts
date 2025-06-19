@@ -28,6 +28,8 @@ export interface PaymentResult {
 }
 
 export interface BotConfig {
+  enabled: boolean;
+  cronSchedule: string;
   executionTime: string;
   paymentDelayHours: number;
   maxRetryAttempts: number;

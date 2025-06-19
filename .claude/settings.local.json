@@ -142,7 +142,15 @@
       "Bash(PRIVATE_KEY=b50677655e339cb2d4504348dab2c6a6a3b5f5762508d9673fff4ffee40ddc94 npx hardhat run scripts/deploy-escrow-v4.js --network sepolia)",
       "WebFetch(domain:sepolia.etherscan.io)",
       "Bash(npx kill-port:*)",
-      "Bash(./verify-fix.sh:*)"
+      "Bash(./verify-fix.sh:*)",
+      "WebFetch(domain:basescan.org)",
+      "WebFetch(domain:docs.base.org)",
+      "Bash(./scripts/start-bot.sh:*)",
+      "Bash(npm run:*)",
+      "Bash(vercel:*)",
+      "Bash(tar:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

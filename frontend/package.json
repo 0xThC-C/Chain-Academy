@@ -75,7 +75,7 @@
     "update-contracts:help": "node scripts/update-contracts.js --help",
     "testnet:validate": "npm run type-check && npm run build",
     "testnet:deploy": "npm run testnet:validate && echo 'Frontend ready for testnet deployment'",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package || echo 'patch-package not found, skipping'"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
