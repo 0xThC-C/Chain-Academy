@@ -3,17 +3,11 @@
 
 // Progressive Escrow V4 contract addresses for all supported L2 networks
 export const PROGRESSIVE_ESCROW_ADDRESSES = {
-  // L2 Mainnets (to be deployed)
-  base: '0x0000000000000000000000000000000000000000',
-  optimism: '0x0000000000000000000000000000000000000000', 
-  arbitrum: '0x0000000000000000000000000000000000000000',
-  polygon: '0x0000000000000000000000000000000000000000',
-  
-  // Testnets
-  baseSepolia: '0x4f9D0F7285858C439BEFfb4F4b481CC4DE57a67f',
-  optimismSepolia: '0x4f9D0F7285858C439BEFfb4F4b481CC4DE57a67f',
-  arbitrumSepolia: '0x4f9D0F7285858C439BEFfb4F4b481CC4DE57a67f',
-  polygonMumbai: '0x4f9D0F7285858C439BEFfb4F4b481CC4DE57a67f'
+  // L2 Mainnets (DEPLOYED)
+  base: '0x8b173c2e4c84b4bdd8c656f3d47bc4259594bd48',
+  optimism: '0x8b173c2e4c84b4bdd8c656f3d47bc4259594bd48', 
+  arbitrum: '0x8b173c2e4c84b4bdd8c656f3d47bc4259594bd48',
+  polygon: '0x8b173c2e4c84b4bdd8c656f3d47bc4259594bd48'
 } as const;
 
 // USDC token addresses for each L2 network
@@ -22,13 +16,7 @@ export const USDC_ADDRESSES = {
   base: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
   optimism: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
   arbitrum: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
-  polygon: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-  
-  // Testnets
-  baseSepolia: '0x036CbD53842c5426634e7929541eC2318f3dCF7e',
-  optimismSepolia: '0x5fd84259d66Cd46123540766Be93DFE6D43130D7',
-  arbitrumSepolia: '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d',
-  polygonMumbai: '0x2058A9D7613eEE744279e3856Ef0eAda5FCbaA7e'
+  polygon: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174'
 } as const;
 
 // USDT token addresses for each L2 network
@@ -37,13 +25,7 @@ export const USDT_ADDRESSES = {
   base: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2',
   optimism: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58',
   arbitrum: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
-  polygon: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
-  
-  // Testnets
-  baseSepolia: '0x4A3A6Dd60A34bB2Aba60D73B4C88315E9CeB6A3D',
-  optimismSepolia: '0x5589BB8228C07c4e15558875fAf2B859f678d129',
-  arbitrumSepolia: '0xb1D4538B4571d411F07960EF2838Ce337FE1E80E',
-  polygonMumbai: '0xA02f6adc7926efeBBd59Fd43A84f4E0c0c91e832'
+  polygon: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
 } as const;
 
 // Chain ID mappings
@@ -52,13 +34,7 @@ export const CHAIN_IDS = {
   base: 8453,
   optimism: 10,
   arbitrum: 42161,
-  polygon: 137,
-  
-  // Testnets
-  baseSepolia: 84532,
-  optimismSepolia: 11155420,
-  arbitrumSepolia: 421614,
-  polygonMumbai: 80001
+  polygon: 137
 } as const;
 
 // Chain names for display
@@ -66,11 +42,7 @@ export const CHAIN_NAMES = {
   [CHAIN_IDS.base]: 'Base',
   [CHAIN_IDS.optimism]: 'Optimism',
   [CHAIN_IDS.arbitrum]: 'Arbitrum',
-  [CHAIN_IDS.polygon]: 'Polygon',
-  [CHAIN_IDS.baseSepolia]: 'Base Sepolia',
-  [CHAIN_IDS.optimismSepolia]: 'Optimism Sepolia',
-  [CHAIN_IDS.arbitrumSepolia]: 'Arbitrum Sepolia',
-  [CHAIN_IDS.polygonMumbai]: 'Polygon Mumbai'
+  [CHAIN_IDS.polygon]: 'Polygon'
 } as const;
 
 // Block explorer URLs
@@ -78,11 +50,7 @@ export const BLOCK_EXPLORERS = {
   [CHAIN_IDS.base]: 'https://basescan.org',
   [CHAIN_IDS.optimism]: 'https://optimistic.etherscan.io',
   [CHAIN_IDS.arbitrum]: 'https://arbiscan.io',
-  [CHAIN_IDS.polygon]: 'https://polygonscan.com',
-  [CHAIN_IDS.baseSepolia]: 'https://sepolia.basescan.org',
-  [CHAIN_IDS.optimismSepolia]: 'https://sepolia-optimism.etherscan.io',
-  [CHAIN_IDS.arbitrumSepolia]: 'https://sepolia.arbiscan.io',
-  [CHAIN_IDS.polygonMumbai]: 'https://mumbai.polygonscan.com'
+  [CHAIN_IDS.polygon]: 'https://polygonscan.com'
 } as const;
 
 // Progressive Escrow V4 ABI (L2-optimized from useProgressivePayment.ts)
@@ -294,14 +262,12 @@ export const getProgressiveEscrowAddress = (chainId: number): string => {
   const chainKey = Object.entries(CHAIN_IDS).find(([, id]) => id === chainId)?.[0] as SupportedChain;
   
   if (!chainKey) {
-    console.warn(`⚠️ Unsupported chain ID: ${chainId}, falling back to Base Sepolia testnet`);
-    return PROGRESSIVE_ESCROW_ADDRESSES.baseSepolia;
+    throw new Error(`⚠️ Unsupported chain ID: ${chainId}. Please switch to Base, Optimism, Arbitrum, or Polygon.`);
   }
   
   const address = PROGRESSIVE_ESCROW_ADDRESSES[chainKey];
-  if (address === '0x0000000000000000000000000000000000000000') {
-    console.warn(`⚠️ Progressive Escrow not deployed on ${chainKey}, using Base Sepolia testnet`);
-    return PROGRESSIVE_ESCROW_ADDRESSES.baseSepolia;
+  if (!address) {
+    throw new Error(`⚠️ Progressive Escrow not deployed on ${chainKey}`);
   }
   
   return address;
@@ -312,8 +278,7 @@ export const getUSDCAddress = (chainId: number): string => {
   const chainKey = Object.entries(CHAIN_IDS).find(([, id]) => id === chainId)?.[0] as SupportedChain;
   
   if (!chainKey) {
-    console.warn(`⚠️ Unsupported chain ID: ${chainId}, falling back to Base Sepolia testnet`);
-    return USDC_ADDRESSES.baseSepolia;
+    throw new Error(`⚠️ Unsupported chain ID: ${chainId}. Please switch to Base, Optimism, Arbitrum, or Polygon.`);
   }
   
   return USDC_ADDRESSES[chainKey];
@@ -324,8 +289,7 @@ export const getUSDTAddress = (chainId: number): string => {
   const chainKey = Object.entries(CHAIN_IDS).find(([, id]) => id === chainId)?.[0] as SupportedChain;
   
   if (!chainKey) {
-    console.warn(`⚠️ Unsupported chain ID: ${chainId}, falling back to Base Sepolia testnet`);
-    return USDT_ADDRESSES.baseSepolia;
+    throw new Error(`⚠️ Unsupported chain ID: ${chainId}. Please switch to Base, Optimism, Arbitrum, or Polygon.`);
   }
   
   return USDT_ADDRESSES[chainKey];
@@ -370,14 +334,9 @@ export const isSupportedChain = (chainId: number): boolean => {
   return Object.values(CHAIN_IDS).includes(chainId as any);
 };
 
-// Helper function to check if chain is testnet
+// Helper function to check if chain is testnet (always false for mainnet-only deployment)
 export const isTestnetChain = (chainId: number): boolean => {
-  return [
-    CHAIN_IDS.baseSepolia,
-    CHAIN_IDS.optimismSepolia,
-    CHAIN_IDS.arbitrumSepolia,
-    CHAIN_IDS.polygonMumbai
-  ].includes(chainId as any);
+  return false;
 };
 
 // Helper function to get all supported chains
@@ -395,17 +354,22 @@ export const validateDeploymentStatus = (chainId: number): {
   contractAddress: string;
   message: string;
 } => {
-  const contractAddress = getProgressiveEscrowAddress(chainId);
-  const isDeployed = contractAddress !== '0x0000000000000000000000000000000000000000';
-  const chainName = getChainName(chainId);
-  
-  return {
-    isDeployed,
-    contractAddress,
-    message: isDeployed 
-      ? `Progressive Escrow V4 deployed on ${chainName}`
-      : `Progressive Escrow V4 not yet deployed on ${chainName}`
-  };
+  try {
+    const contractAddress = getProgressiveEscrowAddress(chainId);
+    const chainName = getChainName(chainId);
+    
+    return {
+      isDeployed: true,
+      contractAddress,
+      message: `Progressive Escrow V4 deployed on ${chainName}`
+    };
+  } catch (error) {
+    return {
+      isDeployed: false,
+      contractAddress: '',
+      message: (error as Error).message
+    };
+  }
 };
 
 // Network configuration for wallet switching
@@ -491,17 +455,17 @@ export const MENTORSHIP_CONTRACT_ABI = PROGRESSIVE_ESCROW_V4_ABI;
 
 // Legacy helper functions for compatibility
 export const getContractAddress = getProgressiveEscrowAddress;
-export const getCurrentContractAddress = () => getProgressiveEscrowAddress(84532); // Base Sepolia
-export const getCurrentUSDCAddress = () => getUSDCAddress(84532);
-export const getCurrentUSDTAddress = () => getUSDTAddress(84532);
-export const isTestnetMode = () => false; // Mainnet deployment ready
+export const getCurrentContractAddress = () => getProgressiveEscrowAddress(8453); // Base Mainnet
+export const getCurrentUSDCAddress = () => getUSDCAddress(8453);
+export const getCurrentUSDTAddress = () => getUSDTAddress(8453);
+export const isTestnetMode = () => false; // Mainnet only
 
-export const getTestnetInfo = () => ({
-  network: 'Base Sepolia Testnet',
-  chainId: 84532,
-  explorer: 'https://sepolia.basescan.org',
+export const getMainnetInfo = () => ({
+  network: 'Base Mainnet',
+  chainId: 8453,
+  explorer: 'https://basescan.org',
   contractAddress: getCurrentContractAddress(),
   usdcAddress: getCurrentUSDCAddress(),
   usdtAddress: getCurrentUSDTAddress(),
-  isTestnet: true
+  isTestnet: false
 });

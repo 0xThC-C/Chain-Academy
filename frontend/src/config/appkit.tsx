@@ -1,6 +1,6 @@
 import React from 'react'
 import { WagmiProvider, createConfig, http } from 'wagmi'
-import { sepolia } from 'wagmi/chains'
+import { base, optimism, arbitrum, polygon } from 'wagmi/chains'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { walletConnect, injected, coinbaseWallet } from 'wagmi/connectors'
@@ -16,19 +16,26 @@ const queryClient = new QueryClient({
   },
 })
 
-// Multiple reliable RPC endpoints for Sepolia
-const sepoliaRpcs = [
-  'https://eth-sepolia.public.blastapi.io',
-  'https://ethereum-sepolia-rpc.publicnode.com',
-  'https://1rpc.io/sepolia',
-  'https://rpc.sepolia.org'
-]
-
-// Enhanced wagmi config with multiple transports and connectors
+// Enhanced wagmi config with L2 mainnet chains
 const config = createConfig({
-  chains: [sepolia],
+  chains: [base, optimism, arbitrum, polygon],
   transports: {
-    [sepolia.id]: http(sepoliaRpcs[0], {
+    [base.id]: http('https://mainnet.base.org', {
+      batch: true,
+      retryCount: 3,
+      retryDelay: 1000,
+    }),
+    [optimism.id]: http('https://mainnet.optimism.io', {
+      batch: true,
+      retryCount: 3,
+      retryDelay: 1000,
+    }),
+    [arbitrum.id]: http('https://arb1.arbitrum.io/rpc', {
+      batch: true,
+      retryCount: 3,
+      retryDelay: 1000,
+    }),
+    [polygon.id]: http('https://polygon-rpc.com', {
       batch: true,
       retryCount: 3,
       retryDelay: 1000,
@@ -86,4 +93,3 @@ export function AppKitProvider({ children }: { children: React.ReactNode }) {
 }
 
 export { config as wagmiConfig }
-export { sepoliaRpcs }
