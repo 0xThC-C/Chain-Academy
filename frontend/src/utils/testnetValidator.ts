@@ -2,7 +2,7 @@
 // Ensures the frontend is properly configured for testnet deployment
 
 import { CURRENT_CONFIG, validateEnvironment } from '../config/environment';
-import { getTestnetInfo, isTestnetMode } from '../contracts/ProgressiveEscrowV4';
+import { getMainnetInfo, isTestnetMode } from '../contracts/ProgressiveEscrowV4';
 import { TESTNET_CONTRACTS } from '../config/testnet';
 
 export interface ValidationResult {
@@ -39,8 +39,8 @@ export const validateTestnetConfiguration = (): ValidationResult => {
   }
 
   // 5. Contract address validation
-  const testnetInfo = getTestnetInfo();
-  if (testnetInfo.contractAddress === '0x0000000000000000000000000000000000000000') {
+  const mainnetInfo = getMainnetInfo();
+  if (mainnetInfo.contractAddress === '0x0000000000000000000000000000000000000000') {
     warnings.push('Mentorship contract address not yet deployed - waiting for Agent 2');
   }
 
@@ -58,12 +58,12 @@ export const validateTestnetConfiguration = (): ValidationResult => {
   });
 
   // 7. Token address validation
-  if (!testnetInfo.usdcAddress || testnetInfo.usdcAddress === '0x0000000000000000000000000000000000000000') {
-    warnings.push('USDC testnet address may need verification');
+  if (!mainnetInfo.usdcAddress || mainnetInfo.usdcAddress === '0x0000000000000000000000000000000000000000') {
+    warnings.push('USDC mainnet address may need verification');
   }
 
-  if (!testnetInfo.usdtAddress || testnetInfo.usdtAddress === '0x0000000000000000000000000000000000000000') {
-    warnings.push('USDT testnet address may need verification');
+  if (!mainnetInfo.usdtAddress || mainnetInfo.usdtAddress === '0x0000000000000000000000000000000000000000') {
+    warnings.push('USDT mainnet address may need verification');
   }
 
   // 8. Backend URL validation

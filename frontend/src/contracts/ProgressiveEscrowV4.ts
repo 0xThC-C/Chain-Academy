@@ -335,7 +335,7 @@ export const isSupportedChain = (chainId: number): boolean => {
 };
 
 // Helper function to check if chain is testnet (always false for mainnet-only deployment)
-export const isTestnetChain = (chainId: number): boolean => {
+export const isTestnetChain = (_chainId: number): boolean => {
   return false;
 };
 

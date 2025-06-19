@@ -1,4 +1,4 @@
-FORCE CACHE CLEAR - L2 MAINNET CONFIGURATION
-Build script: Removed Sepolia, added Base/Optimism/Arbitrum/Polygon
-Version: 1.0.0
-Ready for production with contract address 0x8b173c2e4c84b4bdd8c656f3d47bc4259594bd48
+FORCE CACHE CLEAR - COMPONENT DESIGN FIXES
+Build script: Fixed broken components causing design issues
+Version: 1.0.1
+Resolved TypeScript errors and CSS conflicts preventing proper styling

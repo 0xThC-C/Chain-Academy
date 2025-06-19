@@ -116,7 +116,7 @@ const ProfileCardSimple: React.FC<ProfileCardSimpleProps> = ({
   return (
     <div className={`rounded-lg border ${
       isDarkMode 
-        ? 'bg-gray-900 border-gray-700 hover:border-gray-600' 
+        ? 'bg-black border-gray-700 hover:border-gray-600' 
         : 'bg-white border-gray-200 hover:border-gray-300'
     } ${isExpanded ? 'shadow-lg' : 'shadow hover:shadow-md'}`}>
       

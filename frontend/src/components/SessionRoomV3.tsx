@@ -42,7 +42,7 @@ class SessionErrorBoundary extends React.Component<
   override render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+        <div className="min-h-screen flex items-center justify-center bg-black text-white">
           <div className="text-center max-w-md mx-auto p-6">
             <div className="bg-red-500 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
               <ExclamationTriangleIcon className="w-8 h-8 text-white" />
@@ -201,7 +201,7 @@ const SessionRoomV3: React.FC<SessionRoomProps> = ({
 
   // Memoized theme classes for performance
   const themeClasses = useMemo(() => ({
-    bg: isDarkMode ? 'bg-gray-900' : 'bg-white',
+    bg: isDarkMode ? 'bg-black' : 'bg-white',
     text: isDarkMode ? 'text-white' : 'text-gray-900',
     border: isDarkMode ? 'border-gray-700' : 'border-gray-200'
   }), [isDarkMode]);

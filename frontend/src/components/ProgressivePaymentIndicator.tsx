@@ -97,7 +97,7 @@ const ProgressivePaymentIndicator: React.FC<ProgressivePaymentIndicatorProps> = 
   const statusInfo = getStatusInfo();
 
   return (
-    <div className={`${className} ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-300'} border rounded-lg p-4 space-y-4`}>
+    <div className={`${className} ${isDarkMode ? 'bg-black border-gray-700' : 'bg-white border-gray-300'} border rounded-lg p-4 space-y-4`}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>

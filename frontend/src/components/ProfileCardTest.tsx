@@ -18,7 +18,7 @@ const ProfileCardTest: React.FC<ProfileCardTestProps> = ({ userAddress, index })
     <div 
       id={cardId}
       className={`rounded-lg border p-4 ${
-        isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+        isDarkMode ? 'bg-black border-gray-700' : 'bg-white border-gray-200'
       }`}
       style={{
         minHeight: isExpanded ? '300px' : '100px',

@@ -233,8 +233,8 @@ const Header: React.FC = () => {
                     item.current
                       ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/20'
                       : navigationBlocked && item.href !== location.pathname
-                      ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed bg-gray-100 dark:bg-gray-800'
-                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                      ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed bg-gray-100 dark:bg-neutral-800'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-neutral-800'
                   } block px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-left w-full flex items-center justify-between`}
                 >
                   <span>{item.name}</span>
