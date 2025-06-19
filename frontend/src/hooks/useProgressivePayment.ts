@@ -428,7 +428,7 @@ export const useProgressivePayment = (
     address: progressiveEscrowAddress as `0x${string}`,
     abi: PROGRESSIVE_ESCROW_ABI,
     eventName: 'ProgressivePaymentReleased',
-    onLogs: (logs) => {
+    onLogs: (logs: any) => {
       console.log('💰 Progressive payment released:', logs);
       refetchSession();
       refetchAvailablePayment();
@@ -440,7 +440,7 @@ export const useProgressivePayment = (
     address: progressiveEscrowAddress as `0x${string}`,
     abi: PROGRESSIVE_ESCROW_ABI,
     eventName: 'SessionPaused',
-    onLogs: (logs) => {
+    onLogs: (logs: any) => {
       console.log('⏸️ Session paused:', logs);
       refetchSession();
     },
@@ -451,7 +451,7 @@ export const useProgressivePayment = (
     address: progressiveEscrowAddress as `0x${string}`,
     abi: PROGRESSIVE_ESCROW_ABI,
     eventName: 'SessionResumed',
-    onLogs: (logs) => {
+    onLogs: (logs: any) => {
       console.log('▶️ Session resumed:', logs);
       refetchSession();
     },
@@ -540,7 +540,7 @@ export const useProgressivePayment = (
     // Check for over-payment protection
     if (state.sessionData) {
       const totalExpectedPayment = state.sessionData.totalAmount;
-      const currentReleased = state.sessionData.releasedAmount + availablePayment;
+      const currentReleased = BigInt(state.sessionData.releasedAmount) + (typeof availablePayment === 'bigint' ? availablePayment : BigInt(0));
       
       if (currentReleased > totalExpectedPayment) {
         console.error('Over-payment detected, blocking release');
@@ -756,10 +756,10 @@ export const useProgressivePayment = (
       handlePayerLeave(address, 'connection_lost');
     }
     
-    if (connected && sessionData && sessionData.status === SessionStatus.Created) {
+    if (connected && sessionData && (sessionData as any).status === SessionStatus.Created) {
       // Auto-start session when WebRTC connects
       startProgressiveSession();
-    } else if (!connected && sessionData && sessionData.isActive && !sessionData.isPaused) {
+    } else if (!connected && sessionData && (sessionData as any).isActive && !(sessionData as any).isPaused) {
       // Auto-pause session when WebRTC disconnects
       pauseSession();
     }
@@ -780,7 +780,7 @@ export const useProgressivePayment = (
     }
     
     heartbeatIntervalRef.current = setInterval(() => {
-      if (webrtcConnectedRef.current && sessionData?.isActive && !sessionData?.isPaused) {
+      if (webrtcConnectedRef.current && (sessionData as any)?.isActive && !(sessionData as any)?.isPaused) {
         sendHeartbeat();
       }
     }, HEARTBEAT_INTERVAL);
@@ -791,12 +791,12 @@ export const useProgressivePayment = (
     }
     
     paymentCheckIntervalRef.current = setInterval(() => {
-      if (webrtcConnectedRef.current && sessionData?.isActive && !sessionData?.isPaused && availablePayment && availablePayment > BigInt(0)) {
+      if (webrtcConnectedRef.current && (sessionData as any)?.isActive && !(sessionData as any)?.isPaused && availablePayment && (availablePayment as any) > BigInt(0)) {
         releaseProgressivePayment();
       }
       
       // Check for auto-completion
-      if (canAutoComplete && sessionData?.isActive) {
+      if (canAutoComplete && (sessionData as any)?.isActive) {
         console.log('🔄 Auto-completing session due to timeout');
         autoCompleteSession();
       }
@@ -827,28 +827,28 @@ export const useProgressivePayment = (
   // Update state when contract data changes
   useEffect(() => {
     if (sessionData) {
-      const totalAmount = Number(formatEther(sessionData.totalAmount || BigInt(0)));
-      const releasedAmount = Number(formatEther(sessionData.releasedAmount || BigInt(0)));
+      const totalAmount = Number(formatEther((sessionData as any).totalAmount || BigInt(0)));
+      const releasedAmount = Number(formatEther((sessionData as any).releasedAmount || BigInt(0)));
       const progressPercentage = totalAmount > 0 ? (releasedAmount / totalAmount) * 100 : 0;
       
       setState(prev => ({
         ...prev,
         sessionData: {
-          sessionId: sessionData.sessionId,
-          student: sessionData.student,
-          mentor: sessionData.mentor,
-          paymentToken: sessionData.paymentToken,
-          totalAmount: sessionData.totalAmount,
-          releasedAmount: sessionData.releasedAmount,
-          sessionDuration: Number(sessionData.sessionDuration),
-          startTime: Number(sessionData.startTime),
-          lastHeartbeat: Number(sessionData.lastHeartbeat),
-          pausedTime: Number(sessionData.pausedTime),
-          createdAt: Number(sessionData.createdAt),
-          status: sessionData.status as SessionStatus,
-          isActive: sessionData.isActive,
-          isPaused: sessionData.isPaused,
-          surveyCompleted: sessionData.surveyCompleted
+          sessionId: (sessionData as any).sessionId,
+          student: (sessionData as any).student,
+          mentor: (sessionData as any).mentor,
+          paymentToken: (sessionData as any).paymentToken,
+          totalAmount: (sessionData as any).totalAmount,
+          releasedAmount: (sessionData as any).releasedAmount,
+          sessionDuration: Number((sessionData as any).sessionDuration),
+          startTime: Number((sessionData as any).startTime),
+          lastHeartbeat: Number((sessionData as any).lastHeartbeat),
+          pausedTime: Number((sessionData as any).pausedTime),
+          createdAt: Number((sessionData as any).createdAt),
+          status: (sessionData as any).status as SessionStatus,
+          isActive: (sessionData as any).isActive,
+          isPaused: (sessionData as any).isPaused,
+          surveyCompleted: (sessionData as any).surveyCompleted
         },
         progressPercentage: Math.round(progressPercentage),
         paymentReleased: releasedAmount,
@@ -863,10 +863,10 @@ export const useProgressivePayment = (
     
     setState(prev => ({
       ...prev,
-      availablePayment: availablePayment || BigInt(0),
+      availablePayment: (availablePayment as any) || BigInt(0),
       timeElapsed: Number(effectiveElapsedTime || 0),
-      needsHeartbeat: needsHeartbeat || false,
-      shouldAutoPause: shouldAutoPause || false,
+      needsHeartbeat: (needsHeartbeat as any) || false,
+      shouldAutoPause: (shouldAutoPause as any) || false,
       isPaused: contractPaused || false,
       securityValidation: validation
     }));
@@ -874,7 +874,7 @@ export const useProgressivePayment = (
 
   // Auto-pause if needed
   useEffect(() => {
-    if (shouldAutoPause && sessionData?.isActive && !sessionData?.isPaused) {
+    if (shouldAutoPause && (sessionData as any)?.isActive && !(sessionData as any)?.isPaused) {
       console.log('⚠️ Auto-pausing session due to missed heartbeat');
       pauseSession();
     }

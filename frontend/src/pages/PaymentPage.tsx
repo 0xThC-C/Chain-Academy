@@ -257,8 +257,8 @@ const PaymentPage: React.FC = () => {
   });
 
   // Prepare approval transaction
-  const totalAmountWei = tokenDecimals ? parseUnits(totalAmount.toString(), tokenDecimals) : BigInt(0);
-  const needsApproval = isNativeToken(selectedToken) ? false : (tokenAllowance ? tokenAllowance < totalAmountWei : true);
+  const totalAmountWei = tokenDecimals ? parseUnits(totalAmount.toString(), tokenDecimals as any) : BigInt(0);
+  const needsApproval = isNativeToken(selectedToken) ? false : (tokenAllowance ? (tokenAllowance as any) < totalAmountWei : true);
 
   // Approval transaction
   const { writeContract: approveWrite, isPending: isApproving, error: approveError } = useWriteContract();
@@ -485,7 +485,7 @@ const PaymentPage: React.FC = () => {
         return false;
       }
       
-      const balanceFormatted = parseFloat(formatUnits(ethBalance.value, tokenDecimals));
+      const balanceFormatted = parseFloat(formatUnits(ethBalance.value, tokenDecimals as any));
       
       // For ETH, we need to account for gas fees (estimate ~0.005 ETH for safety)
       const gasEstimate = 0.005; // Conservative gas estimate in ETH
@@ -507,7 +507,7 @@ const PaymentPage: React.FC = () => {
         console.log('❌ No token balance detected');
         return false;
       }
-      const balanceFormatted = parseFloat(formatUnits(tokenBalance, tokenDecimals));
+      const balanceFormatted = parseFloat(formatUnits(tokenBalance as any, tokenDecimals as any));
       return balanceFormatted >= totalAmount;
     }
   };
@@ -518,10 +518,10 @@ const PaymentPage: React.FC = () => {
     
     if (isNativeToken(selectedToken)) {
       if (!ethBalance) return '0';
-      return parseFloat(formatUnits(ethBalance.value, tokenDecimals)).toFixed(4);
+      return parseFloat(formatUnits(ethBalance.value, tokenDecimals as any)).toFixed(4);
     } else {
       if (!tokenBalance) return '0';
-      return parseFloat(formatUnits(tokenBalance, tokenDecimals)).toFixed(2);
+      return parseFloat(formatUnits(tokenBalance as any, tokenDecimals as any)).toFixed(2);
     }
   };
 
