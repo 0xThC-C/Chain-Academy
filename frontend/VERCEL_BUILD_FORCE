@@ -1,4 +1,4 @@
-FORCE CACHE CLEAR - VITE BUILD ONLY
-Build script: node build.js (Vite direct, React Scripts fallback)
+FORCE CACHE CLEAR - VERCEL CONFIG FIX
+Build script: node build.js + vercel.json config
 Version: 0.1.1
-Fixed index.html script tag indentation
+Relaxed CSP, added explicit Vercel settings
