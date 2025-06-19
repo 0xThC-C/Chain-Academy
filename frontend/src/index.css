@@ -22,11 +22,28 @@
   }
   
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700;
+    @apply bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700;
   }
   
   .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white;
+    @apply w-full px-3 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-neutral-700 text-gray-900 dark:text-white text-sm;
+  }
+  
+  /* Mobile-first responsive grid utilities */
+  .responsive-grid {
+    @apply grid gap-4 sm:gap-6 lg:gap-8;
+  }
+  
+  .responsive-grid-2 {
+    @apply grid-cols-1 sm:grid-cols-2;
+  }
+  
+  .responsive-grid-3 {
+    @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+  }
+  
+  .responsive-grid-4 {
+    @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
   }
 }
 
@@ -40,5 +57,32 @@
       opacity: 1;
       transform: scale(1) translateY(0);
     }
+  }
+  
+  /* Layout fixes */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Responsive container fixes */
+  .container-responsive {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* Fix overflow issues */
+  .overflow-wrap {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
   }
 }

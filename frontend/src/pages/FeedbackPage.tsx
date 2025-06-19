@@ -19,9 +19,9 @@ const FeedbackPage: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
       <div className={`max-w-md w-full p-6 rounded-lg border ${
-        isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
       }`}>
         <div className="text-center">
           <ExclamationTriangleIcon className={`w-12 h-12 mx-auto mb-4 ${

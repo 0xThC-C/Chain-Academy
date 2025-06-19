@@ -331,7 +331,7 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({
   const isDevelopment = process.env.NODE_ENV === 'development';
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white dark:bg-neutral-900 flex items-center justify-center p-4">
       <div className="text-center max-w-lg mx-auto">
         <div className={`${
           corruptionDetected ? 'bg-orange-500' : 'bg-red-500'

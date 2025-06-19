@@ -88,7 +88,7 @@ const Header: React.FC = () => {
 
   return (
     <header 
-      className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 relative z-50"
+      className="bg-white dark:bg-black shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50"
       role="banner"
     >
 
@@ -115,7 +115,7 @@ const Header: React.FC = () => {
       )}
       
       <div className="w-full px-4 sm:px-6 lg:px-8 relative">
-        <div className="flex justify-between items-center h-16 min-h-[4rem] flex-nowrap">
+        <div className="flex justify-between items-center h-16 min-h-[4rem]">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
             <button
@@ -161,7 +161,7 @@ const Header: React.FC = () => {
           </div>
 
           {/* Navigation */}
-          <nav className="hidden lg:flex space-x-4 xl:space-x-8 items-center h-16 flex-shrink-0">
+          <nav className="hidden lg:flex space-x-4 xl:space-x-8 items-center h-16 flex-shrink-0 mx-4">
             {navigation.map((item) => (
               <button
                 key={item.name}
@@ -222,8 +222,8 @@ const Header: React.FC = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-gray-200 dark:border-gray-700 py-3">
-            <div className="flex flex-col space-y-2">
+          <div className="lg:hidden border-t border-gray-200 dark:border-gray-700 py-3 absolute top-full left-0 right-0 bg-white dark:bg-black shadow-lg z-40">
+            <div className="flex flex-col space-y-2 px-4">
               {navigation.map((item) => (
                 <button
                   key={item.name}

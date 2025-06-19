@@ -201,17 +201,17 @@ const UserProfilePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} flex items-center justify-center`}>
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className={`min-h-screen ${isDarkMode ? 'bg-black' : 'bg-white'} flex items-center justify-center`}>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
       </div>
     );
   }
 
   if (error || !userProfile) {
     return (
-      <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} flex items-center justify-center`}>
+      <div className={`min-h-screen ${isDarkMode ? 'bg-black' : 'bg-white'} flex items-center justify-center`}>
         <div className="text-center">
-          <p className="text-primary-600 mb-4">{error || 'User not found'}</p>
+          <p className="text-red-600 mb-4">{error || 'User not found'}</p>
           <button
             onClick={() => navigate('/reviews')}
             className={`flex items-center mx-auto transition-colors duration-200 ${
@@ -231,7 +231,7 @@ const UserProfilePage: React.FC = () => {
   const reviewsToShow = activeTab === 'received' ? mentorReviews : studentReviews;
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Navigation */}
         <button
@@ -256,7 +256,7 @@ const UserProfilePage: React.FC = () => {
               <UserAvatar 
                 address={userProfile.address} 
                 size="xl" 
-                className="ring-4 ring-primary-600 ring-opacity-50"
+                className="ring-4 ring-red-600 ring-opacity-50"
               />
             </div>
 
@@ -389,7 +389,7 @@ const UserProfilePage: React.FC = () => {
                   onClick={() => setActiveTab('received')}
                   className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
                     activeTab === 'received'
-                      ? 'border-primary-600 text-primary-600 dark:text-primary-400'
+                      ? 'border-red-600 text-red-600 dark:text-red-400'
                       : `border-transparent ${
                           isDarkMode 
                             ? 'text-gray-400 hover:text-gray-300 hover:border-gray-600' 
@@ -403,7 +403,7 @@ const UserProfilePage: React.FC = () => {
                   onClick={() => setActiveTab('given')}
                   className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
                     activeTab === 'given'
-                      ? 'border-primary-600 text-primary-600 dark:text-primary-400'
+                      ? 'border-red-600 text-red-600 dark:text-red-400'
                       : `border-transparent ${
                           isDarkMode 
                             ? 'text-gray-400 hover:text-gray-300 hover:border-gray-600' 
@@ -421,7 +421,7 @@ const UserProfilePage: React.FC = () => {
           <div className="space-y-6">
             {reviewsToShow.length === 0 ? (
               <div className={`text-center py-12 ${
-                isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+                isDarkMode ? 'bg-black' : 'bg-white'
               } rounded-lg`}>
                 <div className={`w-16 h-16 mx-auto mb-4 rounded-full ${
                   isDarkMode ? 'bg-gray-800' : 'bg-gray-200'

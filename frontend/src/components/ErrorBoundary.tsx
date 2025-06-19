@@ -105,7 +105,7 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetError 
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+    <div className="min-h-screen bg-white dark:bg-neutral-900 flex items-center justify-center">
       <div className="text-center max-w-md mx-auto p-6">
         <div className="bg-red-500 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
           <ExclamationTriangleIcon className="w-8 h-8 text-white" />

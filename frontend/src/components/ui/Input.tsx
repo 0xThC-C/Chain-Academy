@@ -90,15 +90,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               // Style variants
               {
                 // Default variant
-                'border-gray-300 bg-white text-gray-900 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-red-400':
+                'border-gray-300 bg-white text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:border-primary-400':
                   variant === 'default' && !hasError && !hasSuccess,
                   
                 // Filled variant
-                'border-transparent bg-gray-100 text-gray-900 focus:bg-white focus:border-red-500 focus:ring-red-500 dark:bg-gray-700 dark:text-white dark:focus:bg-gray-800 dark:focus:border-red-400':
+                'border-transparent bg-gray-100 text-gray-900 focus:bg-white focus:border-primary-500 focus:ring-primary-500 dark:bg-gray-700 dark:text-white dark:focus:bg-gray-800 dark:focus:border-primary-400':
                   variant === 'filled' && !hasError && !hasSuccess,
                   
                 // Minimal variant
-                'border-transparent border-b-2 border-b-gray-300 bg-transparent rounded-none px-0 focus:border-b-red-500 focus:ring-0 dark:border-b-gray-600 dark:focus:border-b-red-400':
+                'border-transparent border-b-2 border-b-gray-300 bg-transparent rounded-none px-0 focus:border-b-primary-500 focus:ring-0 dark:border-b-gray-600 dark:focus:border-b-primary-400':
                   variant === 'minimal' && !hasError && !hasSuccess,
               },
               

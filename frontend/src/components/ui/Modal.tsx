@@ -170,7 +170,7 @@ const Modal: React.FC<EnhancedModalProps> = ({
       <div
         ref={modalRef}
         className={cn(
-          'relative w-full max-h-full bg-white dark:bg-gray-900 rounded-lg shadow-xl',
+          'relative w-full max-h-full bg-white dark:bg-neutral-900 rounded-lg shadow-xl',
           'border border-gray-200 dark:border-gray-800',
           
           // Size variants
@@ -221,7 +221,7 @@ const Modal: React.FC<EnhancedModalProps> = ({
                   'ml-4 p-2 rounded-lg transition-colors',
                   'text-gray-400 hover:text-gray-600 hover:bg-gray-100',
                   'dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-gray-800',
-                  'focus:outline-none focus:ring-2 focus:ring-red-500'
+                  'focus:outline-none focus:ring-2 focus:ring-primary-500'
                 )}
                 aria-label="Close modal"
               >
@@ -297,7 +297,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           <button
             onClick={handleCancel}
             disabled={isLoading}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 disabled:opacity-50"
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-neutral-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-neutral-700 disabled:opacity-50"
           >
             {cancelText}
           </button>
@@ -308,7 +308,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             className={cn(
               'px-4 py-2 text-sm font-medium text-white rounded-lg disabled:opacity-50',
               {
-                'bg-red-600 hover:bg-red-700': variant === 'danger',
+                'bg-primary-600 hover:bg-primary-700': variant === 'danger',
                 'bg-yellow-600 hover:bg-yellow-700': variant === 'warning',
                 'bg-blue-600 hover:bg-blue-700': variant === 'info',
               }

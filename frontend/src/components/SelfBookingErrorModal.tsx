@@ -60,15 +60,15 @@ const SelfBookingErrorModal: React.FC<SelfBookingErrorModalProps> = ({
             </h4>
             <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-300">
               <li className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary-red rounded-full"></div>
+                <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
                 <span>Browse other mentors to book sessions with them</span>
               </li>
               <li className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary-red rounded-full"></div>
+                <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
                 <span>Wait for students to book sessions with you</span>
               </li>
               <li className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary-red rounded-full"></div>
+                <div className="w-1.5 h-1.5 bg-primary-600 rounded-full"></div>
                 <span>Edit your mentorship details in your dashboard</span>
               </li>
             </ul>

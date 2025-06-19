@@ -159,7 +159,7 @@ class StorageErrorBoundary extends Component<Props, State> {
       const diagnostics = detectStorageIssues();
       
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-900 p-4">
           <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
             <div className="text-center mb-6">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/20 mb-4">

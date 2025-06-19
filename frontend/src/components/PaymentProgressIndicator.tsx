@@ -90,7 +90,7 @@ const PaymentProgressIndicator: React.FC<PaymentProgressIndicatorProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
-          <CurrencyDollarIcon className="h-5 w-5 text-primary-red" />
+          <CurrencyDollarIcon className="h-5 w-5 text-primary-600" />
           <h3 className={`text-lg font-semibold ${
             isDarkMode ? 'text-white' : 'text-gray-900'
           }`}>

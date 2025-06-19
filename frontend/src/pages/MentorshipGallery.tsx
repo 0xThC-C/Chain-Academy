@@ -556,9 +556,9 @@ const MentorshipGallery: React.FC = () => {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-primary-red rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <UserIcon className="h-8 w-8 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
@@ -576,7 +576,7 @@ const MentorshipGallery: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -590,7 +590,7 @@ const MentorshipGallery: React.FC = () => {
 
         {/* Filters */}
         <div className="card p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Search */}
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -652,7 +652,7 @@ const MentorshipGallery: React.FC = () => {
         {/* Mentor Cards Grid */}
         {sortedMentors.length === 0 ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-gray-200 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-4">
               <UserIcon className="h-8 w-8 text-gray-400" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -674,7 +674,7 @@ const MentorshipGallery: React.FC = () => {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {sortedMentors.map((mentor) => (
             <div key={mentor.id} className="card p-6 hover:shadow-xl transition-shadow duration-300">
               {/* Mentor Header */}
@@ -683,7 +683,7 @@ const MentorshipGallery: React.FC = () => {
                   {mentor.mentorAddress ? (
                     <UserAvatar address={mentor.mentorAddress} size="md" className="" />
                   ) : (
-                    <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gray-200 dark:bg-neutral-700 rounded-full flex items-center justify-center">
                       <UserIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
                     </div>
                   )}
@@ -707,7 +707,7 @@ const MentorshipGallery: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs font-medium text-gray-600 dark:text-gray-300 rounded">
+                <span className="px-2 py-1 bg-gray-100 dark:bg-neutral-700 text-xs font-medium text-gray-600 dark:text-gray-300 rounded">
                   {mentor.category}
                 </span>
               </div>
@@ -727,7 +727,7 @@ const MentorshipGallery: React.FC = () => {
                 {mentor.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="px-2 py-1 bg-primary-red/10 text-primary-red text-xs rounded"
+                    className="px-2 py-1 bg-red-600/10 text-red-600 text-xs rounded"
                   >
                     {skill}
                   </span>
@@ -817,8 +817,8 @@ const MentorshipGallery: React.FC = () => {
 
       {/* Booking Modal */}
       {showBookingModal && selectedMentor && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="bg-white dark:bg-neutral-800 rounded-lg max-w-4xl w-full max-h-[95vh] overflow-y-auto my-4">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -892,7 +892,7 @@ const MentorshipGallery: React.FC = () => {
                             disabled={!isAvailable}
                             className={`h-10 w-10 text-sm rounded-lg border transition-colors ${
                               isSelected
-                                ? 'bg-primary-red text-white border-primary-red'
+                                ? 'bg-red-600 text-white border-red-600'
                                 : isAvailable
                                 ? 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600'
                                 : 'text-gray-300 dark:text-gray-600 cursor-not-allowed border-gray-100 dark:border-gray-700'
@@ -910,7 +910,7 @@ const MentorshipGallery: React.FC = () => {
                     <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
                       Available Times
                     </h4>
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2">
                       {timeSlots.map((time) => {
                         const isSlotAvailable = isTimeSlotAvailable(selectedDate, time);
                         
@@ -949,9 +949,9 @@ const MentorshipGallery: React.FC = () => {
                             disabled={!isSlotAvailable}
                             className={`p-3 text-sm rounded-lg border transition-colors relative ${
                               selectedTime === time
-                                ? 'bg-primary-red text-white border-primary-red'
+                                ? 'bg-red-600 text-white border-red-600'
                                 : !isSlotAvailable
-                                ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 border-gray-200 dark:border-gray-600 cursor-not-allowed'
+                                ? 'bg-gray-100 dark:bg-neutral-800 text-gray-400 dark:text-gray-500 border-gray-200 dark:border-gray-600 cursor-not-allowed'
                                 : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600'
                             }`}
                             title={getTooltipMessage()}
@@ -984,7 +984,7 @@ const MentorshipGallery: React.FC = () => {
                       {selectedMentor.mentorAddress ? (
                         <UserAvatar address={selectedMentor.mentorAddress} size="md" className="" />
                       ) : (
-                        <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                        <div className="w-12 h-12 bg-gray-200 dark:bg-neutral-700 rounded-full flex items-center justify-center">
                           <UserIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
                         </div>
                       )}
@@ -1039,7 +1039,7 @@ const MentorshipGallery: React.FC = () => {
                           {selectedMentor.skills.map((skill) => (
                             <span
                               key={skill}
-                              className="px-2 py-1 bg-primary-red/10 text-primary-red text-xs rounded"
+                              className="px-2 py-1 bg-red-600/10 text-red-600 text-xs rounded"
                             >
                               {skill}
                             </span>
@@ -1093,8 +1093,8 @@ const MentorshipGallery: React.FC = () => {
                     disabled={!selectedTime}
                     className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
                       !selectedTime
-                        ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                        : 'bg-primary-red hover:bg-red-700 text-white'
+                        ? 'bg-gray-300 dark:bg-neutral-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                        : 'bg-red-600 hover:bg-red-700 text-white'
                     }`}
                   >
                     Continue to Payment

@@ -12,15 +12,15 @@ if ! command -v pm2 &> /dev/null; then
 fi
 
 # Check if we're in the right directory
-if [ ! -f "ecosystem.config.js" ]; then
-    echo "Error: ecosystem.config.js not found!"
+if [ ! -f "ecosystem.config.cjs" ]; then
+    echo "Error: ecosystem.config.cjs not found!"
     echo "Please run this script from the Chain Academy V2 root directory"
     exit 1
 fi
 
 # Stop any existing instances
 echo "Stopping any existing instances..."
-pm2 delete ecosystem.config.js 2>/dev/null || true
+pm2 delete ecosystem.config.cjs 2>/dev/null || true
 
 # Create logs directory if it doesn't exist
 mkdir -p logs

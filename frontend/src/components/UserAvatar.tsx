@@ -101,7 +101,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
           onError={handleImageError}
         />
       ) : (
-        <div className="w-full h-full bg-primary-red rounded-full flex items-center justify-center">
+        <div className="w-full h-full bg-primary-600 rounded-full flex items-center justify-center">
           <UserIcon className={`${iconSizes[size]} text-white`} />
         </div>
       )}

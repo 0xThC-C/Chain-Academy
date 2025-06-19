@@ -174,9 +174,9 @@ const ReviewsPage: React.FC = () => {
   // Show wallet connection prompt if not connected
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-primary-red rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <UserIcon className="h-8 w-8 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
@@ -264,7 +264,7 @@ const ReviewsPage: React.FC = () => {
           {/* Statistics Cards */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+          <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-black' : 'bg-gray-50'}`}>
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <ChatBubbleLeftRightIcon className="w-8 h-8 text-blue-500" />
@@ -278,7 +278,7 @@ const ReviewsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+          <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-black' : 'bg-gray-50'}`}>
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <CheckCircleIcon className="w-8 h-8 text-green-500" />
@@ -292,7 +292,7 @@ const ReviewsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+          <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-black' : 'bg-gray-50'}`}>
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <StarSolidIcon className="w-8 h-8 text-yellow-500" />
@@ -306,7 +306,7 @@ const ReviewsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+          <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-black' : 'bg-gray-50'}`}>
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <AcademicCapIcon className="w-8 h-8 text-purple-500" />
@@ -322,7 +322,7 @@ const ReviewsPage: React.FC = () => {
         </div>
 
         {/* Rating Distribution */}
-        <div className={`rounded-lg p-6 mb-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className={`rounded-lg p-6 mb-8 ${isDarkMode ? 'bg-black' : 'bg-gray-50'}`}>
           <h3 className="text-lg font-semibold mb-4">Rating Distribution</h3>
           <div className="space-y-3">
             {[5, 4, 3, 2, 1].map((rating) => {
@@ -401,7 +401,7 @@ const ReviewsPage: React.FC = () => {
 
         {/* Filters Panel */}
         {showFilters && (
-          <div className={`rounded-lg p-4 mb-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+          <div className={`rounded-lg p-4 mb-6 ${isDarkMode ? 'bg-black' : 'bg-gray-50'}`}>
             <h4 className="font-semibold mb-3">Filter by:</h4>
             <div className="flex flex-wrap gap-2">
               {[
@@ -433,7 +433,7 @@ const ReviewsPage: React.FC = () => {
         {/* Reviews List */}
         <div className="space-y-6">
           {filteredAndSortedReviews.length === 0 ? (
-            <div className={`text-center py-12 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} rounded-lg`}>
+            <div className={`text-center py-12 ${isDarkMode ? 'bg-black' : 'bg-gray-50'} rounded-lg`}>
               <ChatBubbleLeftRightIcon className={`w-16 h-16 mx-auto mb-4 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`} />
               <h3 className={`text-lg font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 No reviews found
@@ -541,7 +541,7 @@ const ReviewsPage: React.FC = () => {
       {selectedReview && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className={`rounded-lg shadow-xl max-w-2xl w-full max-h-full overflow-auto ${
-            isDarkMode ? 'bg-gray-900' : 'bg-white'
+            isDarkMode ? 'bg-black' : 'bg-white'
           }`}>
             <div className={`p-6 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
               <div className="flex items-center justify-between">

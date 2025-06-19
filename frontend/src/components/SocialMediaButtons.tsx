@@ -43,7 +43,7 @@ const SocialMediaButtons: React.FC<SocialMediaButtonsProps> = ({
   };
 
   return (
-    <div className="fixed bottom-6 right-6 flex flex-col space-y-3 z-40">
+    <div className="fixed bottom-6 right-6 flex flex-col space-y-3 z-30">
       {/* X (Twitter) Button */}
       <button
         onClick={() => handleSocialClick(twitterUrl, 'X (Twitter)')}

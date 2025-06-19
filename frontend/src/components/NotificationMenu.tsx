@@ -145,7 +145,7 @@ const NotificationMenu: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         className={`relative p-2 rounded-lg transition-colors ${
           isOpen
-            ? 'bg-primary-red text-white'
+            ? 'bg-primary-600 text-white'
             : isDarkMode
             ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
             : 'bg-gray-200 text-gray-600 hover:bg-gray-300'

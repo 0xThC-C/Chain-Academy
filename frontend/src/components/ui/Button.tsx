@@ -48,7 +48,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           // Style variants
           {
             // Primary and Danger - Red brand color
-            'bg-red-600 text-white border border-red-600 hover:bg-red-700 hover:border-red-700 focus-visible:ring-red-500 shadow-sm':
+            'bg-primary-600 text-white border border-primary-600 hover:bg-primary-700 hover:border-primary-700 focus-visible:ring-primary-500 shadow-sm':
               variant === 'primary' || variant === 'danger',
               
             // Secondary - Gray with border

@@ -255,7 +255,7 @@ const PaymentErrorModal: React.FC<PaymentErrorModalProps> = ({
           <ul className="space-y-2">
             {errorType.suggestions.map((suggestion, index) => (
               <li key={index} className="flex items-start space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary-red rounded-full mt-2 flex-shrink-0"></div>
+                <div className="w-1.5 h-1.5 bg-primary-600 rounded-full mt-2 flex-shrink-0"></div>
                 <span className={`text-sm ${
                   isDarkMode ? 'text-gray-300' : 'text-gray-600'
                 }`}>
@@ -275,7 +275,7 @@ const PaymentErrorModal: React.FC<PaymentErrorModalProps> = ({
               className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
                 isRetrying
                   ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                  : 'bg-primary-red hover:bg-red-600 text-white'
+                  : 'bg-primary-600 hover:bg-primary-700 text-white'
               } flex items-center justify-center space-x-2`}
             >
               {isRetrying ? (

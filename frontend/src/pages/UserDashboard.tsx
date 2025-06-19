@@ -43,9 +43,9 @@ const UserDashboard: React.FC = () => {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-primary-red rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <UserIcon className="h-8 w-8 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
@@ -78,11 +78,11 @@ const UserDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Sidebar */}
-          <div className="lg:w-64">
+          <div className="lg:w-64 lg:flex-shrink-0">
             <div className="card p-6">
               <div className="flex items-center space-x-3 mb-6">
                 <UserAvatar 
@@ -106,8 +106,8 @@ const UserDashboard: React.FC = () => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
                       activeTab === tab.id
-                        ? 'bg-primary-red text-white'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        ? 'bg-red-600 text-white'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                     }`}
                   >
                     <tab.icon className="h-5 w-5" />
@@ -1217,12 +1217,12 @@ const MyMentorshipsTab: React.FC<{ navigate: any; setActiveTab: (tab: TabType) =
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex space-x-1 mb-6 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+        <div className="flex space-x-1 mb-6 bg-gray-100 dark:bg-neutral-800 rounded-lg p-1">
           <button
             onClick={() => setActiveView('created')}
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeView === 'created'
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                ? 'bg-white dark:bg-neutral-700 text-gray-900 dark:text-white shadow-sm'
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
@@ -1232,7 +1232,7 @@ My Offerings ({createdMentorships.length})
             onClick={() => setActiveView('sessions')}
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeView === 'sessions'
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                ? 'bg-white dark:bg-neutral-700 text-gray-900 dark:text-white shadow-sm'
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
@@ -1282,7 +1282,7 @@ Booked Sessions ({bookedSessions.length})
                           <span>{mentorship.priceUSDC} USDC</span>
                         </div>
                         <div className="flex items-center space-x-1">
-                          <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                          <span className="text-xs bg-gray-100 dark:bg-neutral-700 px-2 py-1 rounded">
                             {mentorship.category}
                           </span>
                         </div>
@@ -1290,7 +1290,7 @@ Booked Sessions ({bookedSessions.length})
                       {mentorship.skills && mentorship.skills.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {mentorship.skills.map((skill: string) => (
-                            <span key={skill} className="inline-block px-2 py-1 bg-primary-red/10 text-primary-red text-xs rounded">
+                            <span key={skill} className="inline-block px-2 py-1 bg-red-600/10 text-red-600 text-xs rounded">
                               {skill}
                             </span>
                           ))}
@@ -1352,12 +1352,12 @@ Active
                       </div>
                       {session.category && (
                         <div className="mt-2">
-                          <span className="inline-block px-2 py-1 bg-primary-red/10 text-primary-red text-xs rounded mr-2">
+                          <span className="inline-block px-2 py-1 bg-red-600/10 text-red-600 text-xs rounded mr-2">
                             {session.category}
                           </span>
                           {session.skills && session.skills.length > 0 && (
                             session.skills.slice(0, 3).map((skill: string) => (
-                              <span key={skill} className="inline-block px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded mr-1">
+                              <span key={skill} className="inline-block px-2 py-1 bg-gray-100 dark:bg-neutral-700 text-gray-600 dark:text-gray-300 text-xs rounded mr-1">
                                 {skill}
                               </span>
                             ))
@@ -1398,7 +1398,7 @@ Active
                           <>
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                               hasEnded
-                                ? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+                                ? 'bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-gray-200'
                                 : isLive
                                 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                                 : canJoin
@@ -1660,7 +1660,7 @@ const FinancialTab: React.FC = () => {
                 {financialData.averageRating > 0 ? financialData.averageRating.toFixed(1) : 'N/A'}
               </p>
             </div>
-            <StarIcon className="h-8 w-8 text-primary-red" />
+            <StarIcon className="h-8 w-8 text-red-600" />
           </div>
         </div>
       </div>
@@ -1679,7 +1679,7 @@ const FinancialTab: React.FC = () => {
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                 Earnings will be paid to your connected wallet
               </p>
-              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="p-3 bg-gray-50 dark:bg-neutral-800 rounded-lg">
                 <p className="font-mono text-sm text-gray-900 dark:text-white">
                   {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'No wallet connected'}
                 </p>
@@ -1703,19 +1703,19 @@ const FinancialTab: React.FC = () => {
           
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
-              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="p-3 bg-gray-50 dark:bg-neutral-800 rounded-lg">
                 <p className="text-sm text-gray-600 dark:text-gray-400">ETH</p>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">
                   {ethBalance ? parseFloat(formatUnits(ethBalance.value, 18)).toFixed(4) : '0.0000'}
                 </p>
               </div>
-              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="p-3 bg-gray-50 dark:bg-neutral-800 rounded-lg">
                 <p className="text-sm text-gray-600 dark:text-gray-400">USDC</p>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">
                   ${financialData.usdcBalance.toFixed(2)}
                 </p>
               </div>
-              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="p-3 bg-gray-50 dark:bg-neutral-800 rounded-lg">
                 <p className="text-sm text-gray-600 dark:text-gray-400">USDT</p>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">
                   ${financialData.usdtBalance.toFixed(2)}
@@ -1780,7 +1780,7 @@ const FinancialTab: React.FC = () => {
       {/* Withdraw Modal */}
       {showWithdrawModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
+          <div className="bg-white dark:bg-neutral-800 rounded-lg max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">Withdraw Funds</h3>
               <button
@@ -1836,14 +1836,14 @@ const FinancialTab: React.FC = () => {
                         setWithdrawAmount(financialData.usdtBalance.toFixed(2));
                       }
                     }}
-                    className="text-sm text-primary-red hover:underline"
+                    className="text-sm text-red-600 hover:underline"
                   >
                     Max
                   </button>
                 </div>
               </div>
               
-              <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+              <div className="bg-gray-50 dark:bg-neutral-700 p-3 rounded-lg">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-400">Destination</span>
                   <span className="font-mono text-gray-900 dark:text-white">

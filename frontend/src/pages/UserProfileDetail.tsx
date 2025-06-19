@@ -163,7 +163,7 @@ const UserProfileDetail: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
       </div>
     );
@@ -171,7 +171,7 @@ const UserProfileDetail: React.FC = () => {
 
   if (error || !userProfile) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error || 'User not found'}</p>
           <button
@@ -189,7 +189,7 @@ const UserProfileDetail: React.FC = () => {
   const reviewsToShow = activeTab === 'received' ? mentorReviews : studentReviews;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Navigation */}
         <button
@@ -201,7 +201,7 @@ const UserProfileDetail: React.FC = () => {
         </button>
 
         {/* User Profile Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-8 mb-8">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
             {/* Avatar */}
             <img
@@ -282,7 +282,7 @@ const UserProfileDetail: React.FC = () => {
                     {userProfile.expertise.map((skill, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
+                        className="px-3 py-1 bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
                       >
                         {skill}
                       </span>
@@ -310,7 +310,7 @@ const UserProfileDetail: React.FC = () => {
         </div>
 
         {/* Reviews Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Reviews</h2>
 
           {/* Tab Navigation */}

@@ -155,8 +155,8 @@ export const themeUtils = {
   getThemeClasses: (isDark: boolean) => ({
     bg: isDark ? 'bg-black' : 'bg-white',
     text: isDark ? 'text-white' : 'text-black',
-    border: isDark ? 'border-gray-800' : 'border-gray-200',
-    surface: isDark ? 'bg-gray-900' : 'bg-gray-50',
+    border: isDark ? 'border-neutral-800' : 'border-gray-200',
+    surface: isDark ? 'bg-neutral-900' : 'bg-gray-50',
   }),
   
   // Conditional class utility

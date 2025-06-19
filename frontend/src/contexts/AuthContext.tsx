@@ -124,7 +124,7 @@ export const withAuth = <P extends object>(
     
     if (!auth.isAuthenticated) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-900">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
               Authentication Required

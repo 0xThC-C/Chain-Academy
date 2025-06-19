@@ -640,7 +640,7 @@ const PaymentPage: React.FC = () => {
 
   if (!bookingData) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
           <ExclamationTriangleIcon className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
@@ -665,9 +665,9 @@ const PaymentPage: React.FC = () => {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-primary-red rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <UserIcon className="h-8 w-8 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
@@ -686,7 +686,7 @@ const PaymentPage: React.FC = () => {
 
   if (isConnected && !chainSupported) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
           <ExclamationTriangleIcon className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
@@ -711,7 +711,7 @@ const PaymentPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -808,7 +808,7 @@ const PaymentPage: React.FC = () => {
                   {bookingData.mentor.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="px-2 py-1 bg-primary-red/10 text-primary-red text-xs rounded"
+                      className="px-2 py-1 bg-red-600/10 text-red-600 text-xs rounded"
                     >
                       {skill}
                     </span>
@@ -820,7 +820,7 @@ const PaymentPage: React.FC = () => {
               {bookingData.mentor.prerequisites && (
                 <div>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Prerequisites</p>
-                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+                  <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-3">
                     <p className="text-sm text-gray-700 dark:text-gray-300">
                       {bookingData.mentor.prerequisites}
                     </p>
@@ -867,7 +867,7 @@ const PaymentPage: React.FC = () => {
                       onClick={() => setSelectedToken(token as SupportedToken)}
                       className={`p-3 rounded-lg border transition-colors ${
                         selectedToken === token
-                          ? 'border-primary-red bg-primary-red/5 text-primary-red'
+                          ? 'border-red-600 bg-red-600/5 text-red-600'
                           : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
                       }`}
                     >
@@ -915,7 +915,7 @@ const PaymentPage: React.FC = () => {
 
               {/* Balance Check */}
               {((isNativeToken(selectedToken) && ethBalance) || (!isNativeToken(selectedToken) && tokenBalance)) && tokenDecimals && (
-                <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <div className="mb-4 p-3 bg-gray-50 dark:bg-neutral-700/50 rounded-lg">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600 dark:text-gray-300">
                       Your {selectedToken} Balance:
@@ -1045,8 +1045,8 @@ const PaymentPage: React.FC = () => {
                   disabled={isProcessing || isApproving || isBooking || isBookingTx || !hasSufficientBalance()}
                   className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-colors ${
                     isProcessing || isApproving || isBooking || isBookingTx || !hasSufficientBalance()
-                      ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                      : 'bg-primary-red hover:bg-red-600 text-white'
+                      ? 'bg-gray-300 dark:bg-neutral-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                      : 'bg-red-600 hover:bg-red-700 text-white'
                   }`}
                 >
                   {isApproving ? (

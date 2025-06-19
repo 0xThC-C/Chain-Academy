@@ -328,7 +328,7 @@ const WalletConnectionV2: React.FC<WalletConnectionProps> = ({
     <button
       onClick={handleConnect}
       className={cn(
-        'flex items-center font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors',
+        'flex items-center font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors',
         sizeStyles[size].button,
         sizeStyles[size].text,
         className

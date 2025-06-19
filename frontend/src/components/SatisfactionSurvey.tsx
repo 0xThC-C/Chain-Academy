@@ -250,9 +250,9 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
               rows={3}
               className={`w-full px-3 py-2 border rounded-lg resize-none transition-colors ${
                 isDarkMode
-                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-red-500'
-                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-red-500'
-              } focus:outline-none focus:ring-1 focus:ring-red-500`}
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-primary-500'
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-primary-500'
+              } focus:outline-none focus:ring-1 focus:ring-primary-500`}
               placeholder="Share your thoughts about the session..."
               disabled={isSubmitting}
             />
@@ -317,7 +317,7 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
               disabled={rating === 0 || !confirmReceived || isSubmitting}
               className={`flex-1 px-4 py-2 rounded-lg transition-colors ${
                 rating > 0 && confirmReceived && !isSubmitting
-                  ? 'bg-red-500 hover:bg-red-600 text-white'
+                  ? 'bg-primary-600 hover:bg-primary-700 text-white'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >

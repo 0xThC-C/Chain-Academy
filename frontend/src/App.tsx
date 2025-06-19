@@ -220,9 +220,9 @@ function App() {
     const isSessionPage = location.pathname.startsWith('/session/');
     
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
+      <div className="min-h-screen bg-white dark:bg-black transition-colors duration-200">
         {!isSessionPage && <Header />}
-        <main>
+        <main className="relative">
                       <EnhancedErrorBoundary>
                         <RouteGuard>
                           <Routes>
