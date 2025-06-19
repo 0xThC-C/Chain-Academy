@@ -134,7 +134,7 @@ const Header: React.FC = () => {
                 'w-8 h-8 rounded-lg flex items-center justify-center',
                 navigationBlocked 
                   ? 'bg-gray-400' 
-                  : 'bg-red-600'
+                  : 'bg-primary-600'
               )}>
                 <AcademicCapIcon 
                   className="h-5 w-5 text-white" 
@@ -169,7 +169,7 @@ const Header: React.FC = () => {
                 disabled={navigationBlocked && item.href !== location.pathname}
                 className={`${
                   item.current
-                    ? 'text-primary-red border-b-2 border-primary-red'
+                    ? 'text-primary-600 border-b-2 border-primary-600'
                     : navigationBlocked && item.href !== location.pathname
                     ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
                     : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
@@ -208,9 +208,12 @@ const Header: React.FC = () => {
 
             {/* Mobile menu button */}
             <button
+              ref={mobileMenuButtonRef}
               type="button"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 flex-shrink-0"
-              aria-label="Open menu"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
             >
               <Bars3Icon className="h-6 w-6" />
             </button>
@@ -218,29 +221,31 @@ const Header: React.FC = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="lg:hidden border-t border-gray-200 dark:border-gray-700 py-3">
-          <div className="flex flex-col space-y-2">
-            {navigation.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => handleSecureNavigation(item.href, item.name)}
-                disabled={navigationBlocked && item.href !== location.pathname}
-                className={`${
-                  item.current
-                    ? 'text-primary-red bg-red-50 dark:bg-red-900/20'
-                    : navigationBlocked && item.href !== location.pathname
-                    ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed bg-gray-100 dark:bg-gray-800'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                } block px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-left w-full flex items-center justify-between`}
-              >
-                <span>{item.name}</span>
-                {navigationBlocked && item.href !== location.pathname && (
-                  <ExclamationTriangleIcon className="h-4 w-4 text-amber-500" />
-                )}
-              </button>
-            ))}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden border-t border-gray-200 dark:border-gray-700 py-3">
+            <div className="flex flex-col space-y-2">
+              {navigation.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => handleSecureNavigation(item.href, item.name)}
+                  disabled={navigationBlocked && item.href !== location.pathname}
+                  className={`${
+                    item.current
+                      ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/20'
+                      : navigationBlocked && item.href !== location.pathname
+                      ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed bg-gray-100 dark:bg-gray-800'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                  } block px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-left w-full flex items-center justify-between`}
+                >
+                  <span>{item.name}</span>
+                  {navigationBlocked && item.href !== location.pathname && (
+                    <ExclamationTriangleIcon className="h-4 w-4 text-amber-500" />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
       
     </header>

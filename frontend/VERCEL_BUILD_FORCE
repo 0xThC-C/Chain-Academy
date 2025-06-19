@@ -1,4 +1,4 @@
-FORCE CACHE CLEAR - VERCEL CONFIG FIX
-Build script: node build.js + vercel.json config
+FORCE CACHE CLEAR - DESIGN FIXES
+Build script: Fixed CSS classes and mobile menu
 Version: 0.1.1
-Relaxed CSP, added explicit Vercel settings
+Restored original design with proper Tailwind classes
