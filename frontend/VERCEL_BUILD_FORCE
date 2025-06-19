@@ -1,4 +1,4 @@
-FORCE CACHE CLEAR - INTELLIGENT BUILD
-Build script: node build.js (tries Vite then React Scripts)
+FORCE CACHE CLEAR - VITE BUILD ONLY
+Build script: node build.js (Vite direct, React Scripts fallback)
 Version: 0.1.1
-Fixed .vercelignore - src/ now included for build
+Fixed index.html script tag indentation
