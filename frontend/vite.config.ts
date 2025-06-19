@@ -125,14 +125,13 @@ export default defineConfig(({ mode }) => {
         // input defaults to index.html in root directory
         
         output: {
-          // Manual chunks for better caching
+          // Manual chunks for better caching - simplified to avoid empty chunks
           manualChunks: {
             // Vendor chunks
-            vendor: ['react', 'react-dom'],
-            router: ['react-router-dom'],
+            vendor: ['react', 'react-dom', 'react-router-dom'],
             web3: ['wagmi', 'viem', '@web3modal/wagmi'],
-            ui: ['@heroicons/react'],
-            utils: ['dompurify'],
+            // ui: ['@heroicons/react'], // Removed - causing empty chunk issues
+            // utils: ['dompurify'], // Removed - too small to justify separate chunk
           },
           
           // Naming patterns

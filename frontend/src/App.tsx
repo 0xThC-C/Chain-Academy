@@ -11,7 +11,7 @@ import EnhancedErrorBoundary from './components/EnhancedErrorBoundary';
 import StorageErrorBoundary from './components/StorageErrorBoundary';
 import RouteGuard from './components/RouteGuard';
 import Header from './components/Header';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/HomePageTest'; // Temporary test version
 import MentorshipGallery from './pages/MentorshipGallery';
 import ReviewsPage from './pages/ReviewsPage';
 import UserDashboard from './pages/UserDashboard';
