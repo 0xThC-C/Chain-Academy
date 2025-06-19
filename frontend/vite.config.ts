@@ -182,10 +182,10 @@ export default defineConfig(({ mode }) => {
         localsConvention: 'camelCase',
       },
       
-      // PostCSS configuration (if needed)
-      postcss: {
-        plugins: [],
-      },
+      // PostCSS configuration will use postcss.config.js
+      // postcss: {
+      //   plugins: [],
+      // },
     },
     
     // ESBuild configuration
