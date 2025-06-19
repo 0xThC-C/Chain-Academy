@@ -74,8 +74,7 @@
     "update-contracts": "node scripts/update-contracts.js",
     "update-contracts:help": "node scripts/update-contracts.js --help",
     "testnet:validate": "npm run type-check && npm run build",
-    "testnet:deploy": "npm run testnet:validate && echo 'Frontend ready for testnet deployment'",
-    "postinstall": "patch-package || echo 'patch-package not found, skipping'"
+    "testnet:deploy": "npm run testnet:validate && echo 'Frontend ready for testnet deployment'"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
@@ -133,7 +132,6 @@
     "globals": "^15.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
-    "patch-package": "^8.0.0",
     "prettier": "^3.4.2",
     "typescript": "^5.6.3",
     "vite": "^6.1.7",
