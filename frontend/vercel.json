@@ -1,12 +1,6 @@
 {
   "version": 2,
   "name": "chain-academy-v2",
-  "builds": [
-    {
-      "src": "dist/**",
-      "use": "@vercel/static"
-    }
-  ],
   "routes": [
     {
       "src": "/static/(.*)",
@@ -16,18 +10,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "REACT_APP_BACKEND_URL": "https://chain-academy-backend.vercel.app",
-    "REACT_APP_BASE_CONTRACT": "0x8b173c2e4c84b4bdd8c656f3d47bc4259594bd48",
-    "REACT_APP_OPTIMISM_CONTRACT": "0x8b173c2e4c84b4bdd8c656f3d47bc4259594bd48",
-    "REACT_APP_ARBITRUM_CONTRACT": "0x8b173c2e4c84b4bdd8c656f3d47bc4259594bd48",
-    "REACT_APP_POLYGON_CONTRACT": "0x8b173c2e4c84b4bdd8c656f3d47bc4259594bd48"
-  },
-  "functions": {
-    "dist/index.html": {
-      "maxDuration": 10
-    }
-  }
+  ]
 }
