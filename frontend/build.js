@@ -18,6 +18,15 @@ const builders = [
     command: 'npx vite build',
     check: () => {
       try {
+        // Check if vite is in package.json
+        const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'));
+        const hasVite = packageJson.dependencies?.vite || packageJson.devDependencies?.vite;
+        
+        if (!hasVite) {
+          console.log('❌ Vite not found in dependencies');
+          return false;
+        }
+        
         // Fix index.html for Vite
         const indexPath = path.join(__dirname, 'index.html');
         if (!fs.existsSync(indexPath)) {
@@ -35,6 +44,7 @@ const builders = [
         }
         return true;
       } catch (e) {
+        console.log('❌ Vite check failed:', e.message);
         return false;
       }
     }
@@ -44,6 +54,15 @@ const builders = [
     command: 'npx react-scripts build',
     check: () => {
       try {
+        // Check if react-scripts is in package.json
+        const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'));
+        const hasReactScripts = packageJson.dependencies?.['react-scripts'] || packageJson.devDependencies?.['react-scripts'];
+        
+        if (!hasReactScripts) {
+          console.log('❌ React Scripts not found in dependencies');
+          return false;
+        }
+        
         // Remove index.html from root for react-scripts
         const indexPath = path.join(__dirname, 'index.html');
         if (fs.existsSync(indexPath)) {
@@ -52,23 +71,7 @@ const builders = [
         }
         return true;
       } catch (e) {
-        return false;
-      }
-    }
-  },
-  {
-    name: 'Craco',
-    command: 'npx craco build',
-    check: () => {
-      try {
-        // Remove index.html from root for craco
-        const indexPath = path.join(__dirname, 'index.html');
-        if (fs.existsSync(indexPath)) {
-          fs.unlinkSync(indexPath);
-          console.log('✅ Removed root index.html for craco');
-        }
-        return true;
-      } catch (e) {
+        console.log('❌ React Scripts check failed:', e.message);
         return false;
       }
     }

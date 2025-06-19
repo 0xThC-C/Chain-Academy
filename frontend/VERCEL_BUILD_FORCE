@@ -1,4 +1,4 @@
-FORCE CACHE CLEAR - VITE BUILD
-Build script: tsc && vite build
+FORCE CACHE CLEAR - INTELLIGENT BUILD
+Build script: node build.js (tries Vite then React Scripts)
 Version: 0.1.1
-No more craco dependency issues
+Fixed .vercelignore - src/ now included for build
