@@ -42,7 +42,7 @@
     "prestart": "node -e \"console.log('[Chain Academy] Initializing with protection system enabled...')\"",
     "start": "craco start",
     "start:vite": "vite --config vite.config.ts",
-    "build": "craco build",
+    "build": "npx craco build",
     "build:vite": "tsc && vite build --config vite.config.ts",
     "build:analyze": "ANALYZE=true npm run build",
     "preview": "vite preview --config vite.config.ts",
