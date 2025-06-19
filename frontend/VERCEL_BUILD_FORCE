@@ -1,0 +1,4 @@
+FORCE CACHE CLEAR - VITE BUILD
+Build script: tsc && vite build
+Version: 0.1.1
+No more craco dependency issues
