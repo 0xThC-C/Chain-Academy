@@ -119,18 +119,34 @@ module.exports = {
     },
   },
   devServer: (devServerConfig, { env, paths }) => {
-    // Update deprecated properties for webpack-dev-server v4+
+    // Clean config for webpack-dev-server v5+ compatibility
     return {
-      ...devServerConfig,
       port: process.env.PORT || 3000,
       host: '127.0.0.1',
       hot: true,
       liveReload: false,
       historyApiFallback: true,
       allowedHosts: 'all',
-      // Remove deprecated middleware properties
-      // onBeforeSetupMiddleware: undefined,
-      // onAfterSetupMiddleware: undefined,
+      compress: true,
+      static: {
+        directory: paths.appPublic,
+        publicPath: ['/'],
+        serveIndex: true,
+        watch: true,
+      },
+      client: {
+        overlay: {
+          errors: true,
+          warnings: false,
+        },
+        progress: false,
+        reconnect: true,
+      },
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+      },
     };
   },
 };
