@@ -1,4 +1,5 @@
 // Comprehensive State Validation System for Context Corruption Detection
+import { safeStorageCleanup, backupCriticalData, restoreCriticalData } from './dataProtection';
 
 interface ValidationResult {
   isValid: boolean;
@@ -382,17 +383,12 @@ class StateValidationSystem {
   public cleanupCorruptedStorage(): void {
     if (typeof window === 'undefined' || !window.localStorage) return;
 
-    const { data: repairedData } = this.validateAndRepair('localStorage', this.getCurrentStorageData());
+    console.log('🛡️ StateValidator: Using safe cleanup to preserve critical user data...');
     
-    // Clear and restore only valid data
-    localStorage.clear();
-    Object.entries(repairedData).forEach(([key, value]) => {
-      try {
-        localStorage.setItem(key, value);
-      } catch (error) {
-        console.warn(`Failed to restore localStorage key '${key}':`, error);
-      }
-    });
+    // Use safe cleanup instead of localStorage.clear() to preserve user data
+    safeStorageCleanup();
+    
+    console.log('✅ StateValidator: Safe cleanup completed - user profiles, reviews, and bookings preserved');
   }
 
   private getCurrentStorageData(): Record<string, string> {

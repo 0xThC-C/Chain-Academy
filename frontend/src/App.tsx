@@ -25,6 +25,7 @@ import { developmentModeProtector } from './utils/developmentModeProtection';
 import { stateValidator } from './utils/stateValidation';
 import { autoFixStorageIssues, detectStorageIssues } from './utils/storageCleanup';
 import { testIndexedDB, testNotificationIndexedDB } from './utils/indexedDBTest';
+import { initializeVersionManager } from './utils/versionManager';
 // import './utils/addSampleReviews'; // Import sample reviews utility for development
 import './styles/hide-phantom.css'; // Import CSS to hide Phantom wallet
 
@@ -48,20 +49,23 @@ const ConditionalSocialMediaButtons: React.FC = () => {
 function App() {
   // Enhanced global error handling with state validation and recovery
   useEffect(() => {
-    // CRITICAL: Initialize storage diagnostics and cleanup
+    // CRITICAL: Initialize storage diagnostics and data protection
     const initializeStorage = async () => {
-      console.log('🔧 Chain Academy: Initializing storage diagnostics...');
+      console.log('🔧 Chain Academy: Initializing storage and data protection...');
       
       try {
+        // Initialize version management FIRST to protect data during updates
+        initializeVersionManager();
+        
         const diagnostics = detectStorageIssues();
         
         if (diagnostics.hasIssues) {
           console.warn('🚨 Storage issues detected on startup:', diagnostics.issues);
-          console.log('🔧 Attempting auto-fix...');
+          console.log('🔧 Attempting auto-fix with data protection...');
           
           const fixSuccess = await autoFixStorageIssues();
           if (fixSuccess) {
-            console.log('✅ Storage auto-fix completed');
+            console.log('✅ Storage auto-fix completed with data protection');
           } else {
             console.warn('⚠️ Storage auto-fix failed, manual intervention may be required');
           }

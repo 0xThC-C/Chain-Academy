@@ -3,85 +3,17 @@
  * 
  * This utility provides functions to detect and fix common storage issues
  * that can cause IndexedDB and other browser storage errors.
+ * 
+ * IMPORTANT: This module has been updated to preserve critical user data
+ * like profiles, reviews, and bookings during cleanup operations.
  */
 
-// Clear all Chain Academy related storage
+import { safeStorageCleanup, backupCriticalData, restoreCriticalData, CLEARABLE_DATA_KEYS } from './dataProtection';
+
+// Clear all Chain Academy related storage (DEPRECATED - use safeStorageCleanup instead)
 export const clearAllChainAcademyStorage = (): void => {
-  try {
-    console.log('🧹 StorageCleanup: Starting comprehensive storage cleanup...');
-    
-    // Clear localStorage keys
-    const localStorageKeys = [
-      'chain_academy_session_reminders',
-      'chain_academy_session_reminders_backup',
-      'chain_academy_notification_sync',
-      'auth_session',
-      'auth_nonces',
-      '@w3m/wallet',
-      '@w3m/last-used-wallet-id',
-      '@w3m/store',
-      'w3m-wallet-id',
-      'wagmi.cache',
-      'wagmi.store',
-      'wagmi.wallet',
-      'web3modal.wallet',
-      'wallet-connection-authorized',
-      'metamask-authorized',
-      'coinbase-authorized',
-      'rabby-authorized',
-      'wallet-auth-timestamp'
-    ];
-    
-    let clearedCount = 0;
-    localStorageKeys.forEach(key => {
-      try {
-        if (localStorage.getItem(key) !== null) {
-          localStorage.removeItem(key);
-          clearedCount++;
-          console.log(`🗑️ StorageCleanup: Cleared localStorage key: ${key}`);
-        }
-      } catch (error) {
-        console.warn(`⚠️ StorageCleanup: Failed to clear localStorage key ${key}:`, error);
-      }
-    });
-    
-    // Clear all wagmi-related keys with wildcard patterns
-    try {
-      Object.keys(localStorage).forEach(key => {
-        if (key.startsWith('wagmi.') || key.startsWith('@w3m/') || key.startsWith('w3m-')) {
-          localStorage.removeItem(key);
-          clearedCount++;
-          console.log(`🗑️ StorageCleanup: Cleared wagmi/w3m key: ${key}`);
-        }
-      });
-    } catch (error) {
-      console.warn('⚠️ StorageCleanup: Error clearing wagmi keys:', error);
-    }
-    
-    // Clear sessionStorage keys
-    const sessionStorageKeys = [
-      'chain_academy_session_reminders_session',
-      'auth_session',
-      'auth_nonces'
-    ];
-    
-    sessionStorageKeys.forEach(key => {
-      try {
-        if (sessionStorage.getItem(key) !== null) {
-          sessionStorage.removeItem(key);
-          clearedCount++;
-          console.log(`🗑️ StorageCleanup: Cleared sessionStorage key: ${key}`);
-        }
-      } catch (error) {
-        console.warn(`⚠️ StorageCleanup: Failed to clear sessionStorage key ${key}:`, error);
-      }
-    });
-    
-    console.log(`✅ StorageCleanup: Cleared ${clearedCount} storage items`);
-    
-  } catch (error) {
-    console.error('❌ StorageCleanup: Error during storage cleanup:', error);
-  }
+  console.warn('⚠️ StorageCleanup: clearAllChainAcademyStorage is deprecated. Using safe cleanup instead...');
+  safeStorageCleanup();
 };
 
 // Clear corrupted IndexedDB databases
