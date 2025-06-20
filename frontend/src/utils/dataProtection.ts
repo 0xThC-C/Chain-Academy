@@ -15,6 +15,7 @@ export const PROTECTED_DATA_KEYS = [
   
   // Bookings and sessions
   'booked_sessions',
+  'mentorship_bookings',
   
   // Payment and withdrawal data
   'withdrawals_',

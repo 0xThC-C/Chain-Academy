@@ -427,6 +427,9 @@ const PaymentPage: React.FC = () => {
           const existingBookings = JSON.parse(localStorage.getItem('mentorship_bookings') || '[]');
           existingBookings.push(bookedSession);
           localStorage.setItem('mentorship_bookings', JSON.stringify(existingBookings));
+          
+          console.log('💾 SAVED BOOKING:', bookedSession);
+          console.log('📊 TOTAL BOOKINGS NOW:', existingBookings.length);
 
           window.dispatchEvent(new CustomEvent('mentorshipBookingUpdated', {
             detail: { session: bookedSession, type: 'created' }

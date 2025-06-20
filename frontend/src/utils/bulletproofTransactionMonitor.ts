@@ -88,7 +88,7 @@ class BulletproofTransactionMonitor {
       state.attempts++;
       state.lastChecked = Date.now();
       
-      console.log(`🛡️ BULLETPROOF: Check attempt ${state.attempts} for ${hash}`);
+      console.log(`🛡️ BULLETPROOF: Check attempt ${state.attempts} for ${hash} on chain ${state.chainId}`);
       
       // Get RPCs for the current chain
       const chainRpcs = this.rpcs[state.chainId as keyof typeof this.rpcs];
@@ -112,6 +112,8 @@ class BulletproofTransactionMonitor {
           });
           
           const result = await response.json();
+          
+          console.log(`🛡️ BULLETPROOF: RPC response from ${rpc}:`, result);
           
           if (result.result) {
             const receipt = result.result;
