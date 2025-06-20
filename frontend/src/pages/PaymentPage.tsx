@@ -614,16 +614,29 @@ const PaymentPage: React.FC = () => {
       }
 
       // Refresh nonce and create payment
+      console.log('🔄 Refreshing nonce before payment...');
       await refetchNonce();
       
       const sessionId = `0x${Date.now().toString(16).padStart(64, '0')}`;
       const currentNonce = userNonce || BigInt(0);
       
+      console.log('📊 Nonce Debug:', {
+        userNonceFromContract: userNonce?.toString(),
+        currentNonceUsing: currentNonce.toString(),
+        address,
+        isConnected,
+        chainSupported
+      });
+      
       console.log('💳 Creating payment with:', {
         sessionId,
         mentor: bookingData.mentor.mentorAddress,
+        tokenAddress,
         amount: totalAmountWei.toString(),
-        token: selectedToken
+        duration: BigInt(bookingData.mentor.duration),
+        nonce: currentNonce.toString(),
+        token: selectedToken,
+        msgValue: isNativeToken(selectedToken) ? totalAmountWei.toString() : '0'
       });
 
       await bookWrite({
