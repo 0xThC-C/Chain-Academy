@@ -7,6 +7,7 @@
 
 interface TransactionState {
   hash: string;
+  chainId: number;
   status: 'pending' | 'success' | 'failed' | 'cancelled';
   receipt: any;
   error: string | null;
@@ -19,15 +20,32 @@ class BulletproofTransactionMonitor {
   private monitoringIntervals: Map<string, NodeJS.Timeout> = new Map();
   private callbacks: Map<string, (state: TransactionState) => void> = new Map();
 
-  private rpcs = [
-    'https://eth-sepolia.public.blastapi.io',
-    'https://ethereum-sepolia-rpc.publicnode.com', 
-    'https://1rpc.io/sepolia',
-    'https://rpc.sepolia.org'
-  ];
+  // RPC endpoints for each supported L2 network
+  private rpcs = {
+    [8453]: [ // Base
+      'https://mainnet.base.org',
+      'https://1rpc.io/base',
+      'https://base.publicnode.com'
+    ],
+    [10]: [ // Optimism
+      'https://mainnet.optimism.io',
+      'https://1rpc.io/op',
+      'https://optimism.publicnode.com'
+    ],
+    [42161]: [ // Arbitrum
+      'https://arb1.arbitrum.io/rpc',
+      'https://1rpc.io/arb',
+      'https://arbitrum.publicnode.com'
+    ],
+    [137]: [ // Polygon
+      'https://polygon-rpc.com',
+      'https://1rpc.io/matic',
+      'https://polygon.publicnode.com'
+    ]
+  };
 
-  startMonitoring(hash: string, callback: (state: TransactionState) => void) {
-    console.log(`🛡️ BULLETPROOF: Starting monitoring for ${hash}`);
+  startMonitoring(hash: string, callback: (state: TransactionState) => void, chainId: number = 8453) {
+    console.log(`🛡️ BULLETPROOF: Starting monitoring for ${hash} on chain ${chainId}`);
     
     // Stop any existing monitoring for this hash
     this.stopMonitoring(hash);
@@ -35,6 +53,7 @@ class BulletproofTransactionMonitor {
     // Initialize state
     const state: TransactionState = {
       hash,
+      chainId,
       status: 'pending',
       receipt: null,
       error: null,
@@ -71,8 +90,15 @@ class BulletproofTransactionMonitor {
       
       console.log(`🛡️ BULLETPROOF: Check attempt ${state.attempts} for ${hash}`);
       
-      // Try each RPC
-      for (const rpc of this.rpcs) {
+      // Get RPCs for the current chain
+      const chainRpcs = this.rpcs[state.chainId as keyof typeof this.rpcs];
+      if (!chainRpcs) {
+        console.warn(`🛡️ BULLETPROOF: No RPCs configured for chain ${state.chainId}`);
+        return;
+      }
+
+      // Try each RPC for the current chain
+      for (const rpc of chainRpcs) {
         try {
           const response = await fetch(rpc, {
             method: 'POST',
@@ -97,7 +123,7 @@ class BulletproofTransactionMonitor {
                 return;
               }
               
-              console.log(`🛡️ BULLETPROOF: SUCCESS detected on ${rpc}!`, receipt);
+              console.log(`🛡️ BULLETPROOF: SUCCESS detected on chain ${state.chainId} via ${rpc}!`, receipt);
               state.status = 'success';
               state.receipt = receipt;
               localStorage.setItem(`tx_${hash}`, JSON.stringify(state));
@@ -138,7 +164,7 @@ class BulletproofTransactionMonitor {
           }
           
         } catch (rpcError) {
-          console.log(`🛡️ BULLETPROOF: RPC ${rpc} failed:`, rpcError);
+          console.log(`🛡️ BULLETPROOF: Chain ${state.chainId} RPC ${rpc} failed:`, rpcError);
           continue; // Try next RPC
         }
       }
@@ -213,7 +239,8 @@ export const bulletproofMonitor = new BulletproofTransactionMonitor();
 // React hook wrapper (but the real work is done outside React)
 export const useBulletproofTransactionMonitor = () => {
   return {
-    startMonitoring: bulletproofMonitor.startMonitoring.bind(bulletproofMonitor),
+    startMonitoring: (hash: string, callback: (state: TransactionState) => void, chainId?: number) => 
+      bulletproofMonitor.startMonitoring(hash, callback, chainId),
     stopMonitoring: bulletproofMonitor.stopMonitoring.bind(bulletproofMonitor),
     getState: bulletproofMonitor.getState.bind(bulletproofMonitor),
     markCancelled: bulletproofMonitor.markCancelled.bind(bulletproofMonitor)

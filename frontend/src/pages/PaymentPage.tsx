@@ -346,7 +346,7 @@ const PaymentPage: React.FC = () => {
       startMonitoring(bookData, (state) => {
         console.log('🛡️ Bulletproof callback:', state);
         setTxState(state);
-      });
+      }, chainId);
       
       // Cleanup function
       return () => {
