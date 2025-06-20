@@ -314,6 +314,7 @@ const PaymentPage: React.FC = () => {
   // Transaction state managed by bulletproof monitor
   const [txState, setTxState] = useState<any>(null);
   const [hasProcessedSuccess, setHasProcessedSuccess] = useState(false);
+  const [hasProcessedFailure, setHasProcessedFailure] = useState(false);
   const [mutedToastTypes, setMutedToastTypes] = useState<Set<string>>(new Set());
   
   // Detect cancellations from writeContract errors  
@@ -388,6 +389,10 @@ const PaymentPage: React.FC = () => {
       console.log('🛡️ Success already processed, skipping...');
       return;
     }
+    if (hasProcessedFailure && txState.status === 'failed') {
+      console.log('🛡️ Failure already processed, skipping...');
+      return;
+    }
 
     console.log('🛡️ Processing bulletproof state update:', txState);
 
@@ -460,8 +465,9 @@ const PaymentPage: React.FC = () => {
         }
       }
       
-    } else if (txState.status === 'failed') {
-      console.error('❌ BULLETPROOF FAILURE');
+    } else if (txState.status === 'failed' && !hasProcessedFailure) {
+      console.error('❌ BULLETPROOF FAILURE - Processing failure...');
+      setHasProcessedFailure(true); // PREVENT MULTIPLE EXECUTIONS
       
       // Show error toast
       showToast({
@@ -482,7 +488,7 @@ const PaymentPage: React.FC = () => {
       // Already handled in cancellation effect
     }
     
-  }, [txState, bookingData, address, totalAmount, selectedToken, hasProcessedSuccess]);
+  }, [txState, bookingData, address, totalAmount, selectedToken, hasProcessedSuccess, hasProcessedFailure]);
 
 
   // Check if user has sufficient balance (including gas fees for ETH)
@@ -592,6 +598,7 @@ const PaymentPage: React.FC = () => {
       setIsProcessing(true);
       setPaymentError(null);
       setHasProcessedSuccess(false); // RESET FLAG FOR NEW TRANSACTION
+      setHasProcessedFailure(false); // RESET FLAG FOR NEW TRANSACTION
       setMutedToastTypes(new Set()); // CLEAR MUTED TOASTS FOR NEW TRANSACTION
       console.log('🔊 Cleared muted toasts for new transaction');
 

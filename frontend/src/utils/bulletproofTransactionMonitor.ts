@@ -20,27 +20,31 @@ class BulletproofTransactionMonitor {
   private monitoringIntervals: Map<string, NodeJS.Timeout> = new Map();
   private callbacks: Map<string, (state: TransactionState) => void> = new Map();
 
-  // RPC endpoints for each supported L2 network
+  // RPC endpoints for each supported L2 network (CORS-friendly endpoints)
   private rpcs = {
-    [8453]: [ // Base
-      'https://mainnet.base.org',
+    [8453]: [ // Base - Using CORS-friendly endpoints
+      'https://base.public.blastapi.io',
       'https://1rpc.io/base',
-      'https://base.publicnode.com'
+      'https://base.publicnode.com',
+      'https://base-mainnet.public.blastapi.io'
     ],
-    [10]: [ // Optimism
-      'https://mainnet.optimism.io',
+    [10]: [ // Optimism - Using CORS-friendly endpoints
+      'https://optimism.public.blastapi.io',
       'https://1rpc.io/op',
-      'https://optimism.publicnode.com'
+      'https://optimism.publicnode.com',
+      'https://op-mainnet.public.blastapi.io'
     ],
-    [42161]: [ // Arbitrum
-      'https://arb1.arbitrum.io/rpc',
+    [42161]: [ // Arbitrum - Using CORS-friendly endpoints
+      'https://arbitrum-one.public.blastapi.io',
       'https://1rpc.io/arb',
-      'https://arbitrum.publicnode.com'
+      'https://arbitrum.publicnode.com',
+      'https://arbitrum-one.publicnode.com'
     ],
-    [137]: [ // Polygon
-      'https://polygon-rpc.com',
+    [137]: [ // Polygon - Using CORS-friendly endpoints
+      'https://polygon.public.blastapi.io',
       'https://1rpc.io/matic',
-      'https://polygon.publicnode.com'
+      'https://polygon.publicnode.com',
+      'https://polygon-mainnet.public.blastapi.io'
     ]
   };
 
@@ -98,6 +102,7 @@ class BulletproofTransactionMonitor {
       }
 
       // Try each RPC for the current chain
+      let corsErrorCount = 0;
       for (const rpc of chainRpcs) {
         try {
           const response = await fetch(rpc, {
@@ -166,8 +171,27 @@ class BulletproofTransactionMonitor {
           }
           
         } catch (rpcError) {
-          console.log(`🛡️ BULLETPROOF: Chain ${state.chainId} RPC ${rpc} failed:`, rpcError);
+          const errorMessage = rpcError instanceof Error ? rpcError.message : String(rpcError);
+          console.log(`🛡️ BULLETPROOF: Chain ${state.chainId} RPC ${rpc} failed:`, errorMessage);
+          
+          // Check for CORS errors specifically
+          if (errorMessage.includes('CORS') || errorMessage.includes('cors')) {
+            corsErrorCount++;
+            console.warn(`🚨 BULLETPROOF: CORS error detected for ${rpc} - this RPC may not be browser-compatible`);
+          }
+          
           continue; // Try next RPC
+        }
+      }
+      
+      // If all RPCs failed with CORS, stop aggressive monitoring to prevent spam
+      if (corsErrorCount === chainRpcs.length) {
+        console.error(`🚨 BULLETPROOF: All RPCs failed with CORS for chain ${state.chainId} - reducing monitoring frequency`);
+        
+        // Only check every 30 seconds instead of every second for CORS issues
+        if (state.attempts % 30 !== 0) {
+          localStorage.setItem(`tx_${hash}`, JSON.stringify(state));
+          return;
         }
       }
       
