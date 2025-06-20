@@ -68,7 +68,28 @@ const PROGRESSIVE_ESCROW_ABI = [
     stateMutability: 'view',
     type: 'function'
   },
+  {
+    inputs: [{ name: 'user', type: 'address' }],
+    name: 'getUserNonce',
+    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function'
+  },
   // Write functions
+  {
+    inputs: [
+      { name: "sessionId", type: "bytes32" },
+      { name: "mentor", type: "address" },
+      { name: "paymentToken", type: "address" },
+      { name: "amount", type: "uint256" },
+      { name: "durationMinutes", type: "uint256" },
+      { name: "nonce", type: "uint256" }
+    ],
+    name: "createProgressiveSession",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function"
+  },
   {
     inputs: [{ name: 'sessionId', type: 'bytes32' }],
     name: 'startProgressiveSession',
