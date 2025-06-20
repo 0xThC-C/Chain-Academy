@@ -31,6 +31,7 @@ import PaymentErrorModal from '../components/PaymentErrorModal';
 import WalletConnectionV2 from '../components/WalletConnectionV2';
 import UserAvatar from '../components/UserAvatar';
 import TransactionToast from '../components/TransactionToast';
+import { useCurrencyConverter } from '../hooks/useCurrencyConverter';
 
 // Helper function to format duration
 const formatDuration = (minutes: number): string => {
@@ -77,6 +78,9 @@ const PaymentPage: React.FC = () => {
 
   // Get booking data from location state
   const bookingData: BookingData | null = location.state?.bookingData || null;
+
+  // Currency converter hook
+  const { convertPrice, rates, isLoading: isLoadingRates, error: ratesError } = useCurrencyConverter();
 
   // Component state
   const [selectedToken, setSelectedToken] = useState<SupportedToken>('ETH');
@@ -157,18 +161,56 @@ const PaymentPage: React.FC = () => {
     cleanupDuplicates();
   }, []); // Run once on mount
 
-  // Calculate amounts
+  // Calculate amounts with proper token conversion
   const calculateAmounts = () => {
-    if (!bookingData) return { baseAmount: 0, platformFee: 0, totalAmount: 0 };
+    if (!bookingData) return { baseAmount: 0, platformFee: 0, totalAmount: 0, displayAmounts: { baseAmount: '0', platformFee: '0', totalAmount: '0' } };
     
-    const baseAmount = bookingData.mentor.priceUSDC;
-    const platformFee = baseAmount * 0.1; // 10% platform fee
-    const totalAmount = baseAmount + platformFee;
+    // Base price is always in USD
+    const baseAmountUSD = bookingData.mentor.priceUSDC;
+    const platformFeeUSD = baseAmountUSD * 0.1; // 10% platform fee
+    const totalAmountUSD = baseAmountUSD + platformFeeUSD;
     
-    return { baseAmount, platformFee, totalAmount };
+    // Convert to selected token
+    let baseAmount, platformFee, totalAmount;
+    let displayAmounts;
+    
+    if (selectedToken === 'ETH') {
+      baseAmount = convertPrice(baseAmountUSD, 'USDC', 'ETH');
+      platformFee = convertPrice(platformFeeUSD, 'USDC', 'ETH');
+      totalAmount = baseAmount + platformFee;
+      
+      displayAmounts = {
+        baseAmount: `${baseAmount.toFixed(6)} ETH`,
+        platformFee: `${platformFee.toFixed(6)} ETH`,
+        totalAmount: `${totalAmount.toFixed(6)} ETH`
+      };
+    } else if (selectedToken === 'USDT') {
+      // USDT is 1:1 with USD
+      baseAmount = baseAmountUSD;
+      platformFee = platformFeeUSD;
+      totalAmount = totalAmountUSD;
+      
+      displayAmounts = {
+        baseAmount: `${baseAmount.toFixed(2)} USDT`,
+        platformFee: `${platformFee.toFixed(2)} USDT`,
+        totalAmount: `${totalAmount.toFixed(2)} USDT`
+      };
+    } else { // USDC
+      baseAmount = baseAmountUSD;
+      platformFee = platformFeeUSD;
+      totalAmount = totalAmountUSD;
+      
+      displayAmounts = {
+        baseAmount: `${baseAmount.toFixed(2)} USDC`,
+        platformFee: `${platformFee.toFixed(2)} USDC`,
+        totalAmount: `${totalAmount.toFixed(2)} USDC`
+      };
+    }
+    
+    return { baseAmount, platformFee, totalAmount, displayAmounts };
   };
 
-  const { baseAmount, platformFee, totalAmount } = calculateAmounts();
+  const { baseAmount, platformFee, totalAmount, displayAmounts } = calculateAmounts();
 
   // Get contract addresses using multi-L2 configuration
   const progressiveEscrowAddress = chainId ? getProgressiveEscrowAddress(chainId) : '0x';
@@ -891,7 +933,7 @@ const PaymentPage: React.FC = () => {
                   <div className="space-y-1 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-300">Session Payment:</span>
-                      <span className="font-mono">{totalAmount.toFixed(4)} ETH</span>
+                      <span className="font-mono">{totalAmount.toFixed(6)} ETH</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-300">Gas Fees (est.):</span>
@@ -900,15 +942,14 @@ const PaymentPage: React.FC = () => {
                     <div className="border-t border-blue-200 dark:border-blue-700 pt-1 mt-1">
                       <div className="flex justify-between font-semibold">
                         <span className="text-blue-900 dark:text-blue-100">Total Needed:</span>
-                        <span className="font-mono text-blue-900 dark:text-blue-100">{(totalAmount + 0.005).toFixed(4)} ETH</span>
+                        <span className="font-mono text-blue-900 dark:text-blue-100">{(totalAmount + 0.005).toFixed(6)} ETH</span>
                       </div>
                     </div>
-                  </div>
-                  <div className="mt-2 p-2 bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded text-xs">
-                    <span className="text-green-700 dark:text-green-300">
-                      ⚡ Balance check temporarily bypassed due to wallet extension conflicts. 
-                      Ensure you have sufficient ETH before proceeding.
-                    </span>
+                    <div className="mt-2 pt-2 border-t border-blue-200 dark:border-blue-700">
+                      <div className="text-xs text-blue-700 dark:text-blue-300">
+                        Converting ${bookingData?.mentor.priceUSDC} USD @ ${rates.ETH_USD.toFixed(2)}/ETH
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -944,23 +985,41 @@ const PaymentPage: React.FC = () => {
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Session Price</span>
                   <span className="text-gray-900 dark:text-white font-medium">
-                    {baseAmount} {selectedToken}
+                    {displayAmounts.baseAmount}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Platform Fee (10%)</span>
                   <span className="text-gray-900 dark:text-white font-medium">
-                    {platformFee.toFixed(2)} {selectedToken}
+                    {displayAmounts.platformFee}
                   </span>
                 </div>
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
                   <div className="flex justify-between">
                     <span className="font-semibold text-gray-900 dark:text-white">Total</span>
                     <span className="font-bold text-lg text-gray-900 dark:text-white">
-                      {totalAmount.toFixed(2)} {selectedToken}
+                      {displayAmounts.totalAmount}
                     </span>
                   </div>
                 </div>
+                
+                {/* Exchange Rate Info for ETH */}
+                {selectedToken === 'ETH' && !isLoadingRates && (
+                  <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-xs">
+                    <div className="flex justify-between items-center">
+                      <span className="text-blue-700 dark:text-blue-300">ETH/USD Rate:</span>
+                      <span className="font-mono text-blue-900 dark:text-blue-100">
+                        ${rates.ETH_USD.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-blue-600 dark:text-blue-400">USD Equivalent:</span>
+                      <span className="font-mono text-blue-800 dark:text-blue-200">
+                        ${(totalAmount * rates.ETH_USD).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Approval Notice */}
@@ -995,9 +1054,6 @@ const PaymentPage: React.FC = () => {
                     <div>
                       <p className="text-sm text-green-700 dark:text-green-300">
                         Paying with ETH - no approval needed! Your payment will be sent directly with the transaction.
-                      </p>
-                      <p className="text-xs text-green-600 dark:text-green-400 mt-1">
-                        ⚡ Balance check temporarily bypassed due to wallet extension conflicts. Ensure you have sufficient ETH before proceeding.
                       </p>
                     </div>
                   </div>
