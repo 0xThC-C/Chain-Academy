@@ -51,11 +51,35 @@ async function checkContractState() {
     });
     
     const ethSupportResult = await ethSupportResponse.json();
-    const isSupported = parseInt(ethSupportResult.result || '0x0', 16) === 1;
-    console.log('💰 ETH token supported:', isSupported);
+    const isEthSupported = parseInt(ethSupportResult.result || '0x0', 16) === 1;
+    console.log('💰 ETH token supported:', isEthSupported);
     
   } catch (error) {
     console.error('❌ Error checking ETH support:', error.message);
+  }
+  
+  // Check USDC token support (0xaf88d065e77c8cC2239327C5EDb3A432268e5831)
+  try {
+    const usdcSupportResponse = await fetch(ARBITRUM_RPC, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'eth_call',
+        params: [{
+          to: CONTRACT_ADDRESS,
+          data: '0x5a3b7e42' + 'af88d065e77c8cC2239327C5EDb3A432268e5831'.toLowerCase().padStart(64, '0')
+        }, 'latest'],
+        id: 3
+      })
+    });
+    
+    const usdcSupportResult = await usdcSupportResponse.json();
+    const isUsdcSupported = parseInt(usdcSupportResult.result || '0x0', 16) === 1;
+    console.log('💰 USDC token supported:', isUsdcSupported);
+    
+  } catch (error) {
+    console.error('❌ Error checking USDC support:', error.message);
   }
 }
 

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enable Tokens - Chain Academy V2</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #ff0000;
+            text-align: center;
+        }
+        .network-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #444;
+            border-radius: 8px;
+        }
+        .network-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .network-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .status.pending { background: #666; }
+        .status.processing { background: #f39c12; }
+        .status.completed { background: #27ae60; }
+        .status.error { background: #e74c3c; }
+        button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #cc0000;
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .token-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+        .token-row:last-child {
+            border-bottom: none;
+        }
+        .error-msg {
+            color: #ff6b6b;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255,0,0,0.1);
+            border-radius: 5px;
+        }
+        .success-msg {
+            color: #51cf66;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0,255,0,0.1);
+            border-radius: 5px;
+        }
+        .wallet-info {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #333;
+            border-radius: 8px;
+        }
+        .progress {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #ff0000;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Enable Tokens on Chain Academy V2</h1>
+        
+        <div class="wallet-info">
+            <div id="wallet-status">Click "Connect Wallet" to begin</div>
+            <button id="connect-btn" onclick="connectWallet()">Connect Wallet</button>
+        </div>
+
+        <div id="main-content" style="display: none;">
+            <p style="text-align: center; margin: 20px 0;">
+                Contract: <code>0x8B173c2E4C84b4bdD8c656F3d47Bc4259594Bd48</code>
+            </p>
+
+            <div class="progress">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div id="progress-text">0 / 12 transactions completed</div>
+            </div>
+
+            <!-- Arbitrum -->
+            <div class="network-section">
+                <div class="network-header">
+                    <span class="network-name">🌐 Arbitrum One</span>
+                    <span id="arbitrum-status" class="status pending">Pending</span>
+                </div>
+                <div class="token-row">
+                    <span>ETH (Native)</span>
+                    <button id="arb-eth-btn" onclick="enableToken('arbitrum', 'ETH')">Enable ETH</button>
+                </div>
+                <div class="token-row">
+                    <span>USDC</span>
+                    <button id="arb-usdc-btn" onclick="enableToken('arbitrum', 'USDC')">Enable USDC</button>
+                </div>
+                <div class="token-row">
+                    <span>USDT</span>
+                    <button id="arb-usdt-btn" onclick="enableToken('arbitrum', 'USDT')">Enable USDT</button>
+                </div>
+                <div id="arbitrum-msg"></div>
+            </div>
+
+            <!-- Base -->
+            <div class="network-section">
+                <div class="network-header">
+                    <span class="network-name">🔵 Base</span>
+                    <span id="base-status" class="status pending">Pending</span>
+                </div>
+                <div class="token-row">
+                    <span>ETH (Native)</span>
+                    <button id="base-eth-btn" onclick="enableToken('base', 'ETH')">Enable ETH</button>
+                </div>
+                <div class="token-row">
+                    <span>USDC</span>
+                    <button id="base-usdc-btn" onclick="enableToken('base', 'USDC')">Enable USDC</button>
+                </div>
+                <div class="token-row">
+                    <span>USDT</span>
+                    <button id="base-usdt-btn" onclick="enableToken('base', 'USDT')">Enable USDT</button>
+                </div>
+                <div id="base-msg"></div>
+            </div>
+
+            <!-- Optimism -->
+            <div class="network-section">
+                <div class="network-header">
+                    <span class="network-name">🔴 Optimism</span>
+                    <span id="optimism-status" class="status pending">Pending</span>
+                </div>
+                <div class="token-row">
+                    <span>ETH (Native)</span>
+                    <button id="optimism-eth-btn" onclick="enableToken('optimism', 'ETH')">Enable ETH</button>
+                </div>
+                <div class="token-row">
+                    <span>USDC</span>
+                    <button id="optimism-usdc-btn" onclick="enableToken('optimism', 'USDC')">Enable USDC</button>
+                </div>
+                <div class="token-row">
+                    <span>USDT</span>
+                    <button id="optimism-usdt-btn" onclick="enableToken('optimism', 'USDT')">Enable USDT</button>
+                </div>
+                <div id="optimism-msg"></div>
+            </div>
+
+            <!-- Polygon -->
+            <div class="network-section">
+                <div class="network-header">
+                    <span class="network-name">🟣 Polygon</span>
+                    <span id="polygon-status" class="status pending">Pending</span>
+                </div>
+                <div class="token-row">
+                    <span>ETH (Native)</span>
+                    <button id="polygon-eth-btn" onclick="enableToken('polygon', 'ETH')">Enable ETH</button>
+                </div>
+                <div class="token-row">
+                    <span>USDC</span>
+                    <button id="polygon-usdc-btn" onclick="enableToken('polygon', 'USDC')">Enable USDC</button>
+                </div>
+                <div class="token-row">
+                    <span>USDT</span>
+                    <button id="polygon-usdt-btn" onclick="enableToken('polygon', 'USDT')">Enable USDT</button>
+                </div>
+                <div id="polygon-msg"></div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: #333; border-radius: 8px;">
+                <h3>Instructions:</h3>
+                <ol>
+                    <li>Make sure you're connected with the OWNER wallet (that deployed the contracts)</li>
+                    <li>Have gas funds on each network before enabling tokens</li>
+                    <li>Click each "Enable" button and approve the transaction</li>
+                    <li>Wait for confirmation before proceeding to the next</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let provider = null;
+        let signer = null;
+        let completedTxs = 0;
+
+        const CONTRACT_ADDRESS = '0x8B173c2E4C84b4bdD8c656F3d47Bc4259594Bd48';
+        const CONTRACT_ABI = [
+            'function addSupportedToken(address token)',
+            'function supportedTokens(address token) view returns (bool)'
+        ];
+
+        const NETWORKS = {
+            arbitrum: {
+                chainId: 42161,
+                name: 'Arbitrum One',
+                rpc: 'https://arb1.arbitrum.io/rpc',
+                tokens: {
+                    ETH: '0x0000000000000000000000000000000000000000',
+                    USDC: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+                    USDT: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9'
+                }
+            },
+            base: {
+                chainId: 8453,
+                name: 'Base',
+                rpc: 'https://mainnet.base.org',
+                tokens: {
+                    ETH: '0x0000000000000000000000000000000000000000',
+                    USDC: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+                    USDT: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2'
+                }
+            },
+            optimism: {
+                chainId: 10,
+                name: 'Optimism',
+                rpc: 'https://mainnet.optimism.io',
+                tokens: {
+                    ETH: '0x0000000000000000000000000000000000000000',
+                    USDC: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+                    USDT: '0x94b008aA00579c1307B0EF2c499aD98a8ce58e58'
+                }
+            },
+            polygon: {
+                chainId: 137,
+                name: 'Polygon',
+                rpc: 'https://polygon-rpc.com',
+                tokens: {
+                    ETH: '0x0000000000000000000000000000000000000000',
+                    USDC: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+                    USDT: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F'
+                }
+            }
+        };
+
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('Please install MetaMask or another Web3 wallet!');
+                    return;
+                }
+
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                signer = provider.getSigner();
+                
+                const address = await signer.getAddress();
+                document.getElementById('wallet-status').innerHTML = 
+                    `Connected: ${address.slice(0, 6)}...${address.slice(-4)}`;
+                document.getElementById('connect-btn').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+
+                // Check initial status for all networks
+                checkAllNetworks();
+            } catch (error) {
+                console.error('Connection error:', error);
+                alert('Failed to connect wallet: ' + error.message);
+            }
+        }
+
+        async function switchNetwork(chainId) {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x' + chainId.toString(16) }],
+                });
+                return true;
+            } catch (error) {
+                if (error.code === 4902) {
+                    alert('Please add this network to your wallet first');
+                }
+                return false;
+            }
+        }
+
+        async function enableToken(network, token) {
+            const btn = document.getElementById(`${network}-${token.toLowerCase()}-btn`);
+            const msgDiv = document.getElementById(`${network}-msg`);
+            const statusSpan = document.getElementById(`${network}-status`);
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Processing...';
+                msgDiv.innerHTML = '';
+                statusSpan.className = 'status processing';
+
+                // Switch to correct network
+                const networkConfig = NETWORKS[network];
+                const switched = await switchNetwork(networkConfig.chainId);
+                if (!switched) {
+                    throw new Error('Failed to switch network');
+                }
+
+                // Get contract instance
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                
+                // Send transaction
+                const tx = await contract.addSupportedToken(networkConfig.tokens[token]);
+                msgDiv.innerHTML = `<div class="success-msg">Transaction sent! Hash: ${tx.hash.slice(0, 10)}...</div>`;
+                
+                // Wait for confirmation
+                await tx.wait();
+                
+                btn.textContent = '✓ Enabled';
+                btn.disabled = true;
+                msgDiv.innerHTML = `<div class="success-msg">${token} enabled successfully!</div>`;
+                
+                completedTxs++;
+                updateProgress();
+                
+                // Check if all tokens for this network are done
+                await checkNetworkStatus(network);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                btn.disabled = false;
+                btn.textContent = 'Retry';
+                msgDiv.innerHTML = `<div class="error-msg">Error: ${error.message}</div>`;
+                statusSpan.className = 'status error';
+            }
+        }
+
+        async function checkNetworkStatus(network) {
+            try {
+                const networkConfig = NETWORKS[network];
+                const provider = new ethers.providers.JsonRpcProvider(networkConfig.rpc);
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+                
+                let allEnabled = true;
+                for (const [tokenName, tokenAddress] of Object.entries(networkConfig.tokens)) {
+                    const isSupported = await contract.supportedTokens(tokenAddress);
+                    const btn = document.getElementById(`${network}-${tokenName.toLowerCase()}-btn`);
+                    
+                    if (isSupported) {
+                        btn.textContent = '✓ Enabled';
+                        btn.disabled = true;
+                    } else {
+                        allEnabled = false;
+                    }
+                }
+                
+                const statusSpan = document.getElementById(`${network}-status`);
+                if (allEnabled) {
+                    statusSpan.className = 'status completed';
+                    statusSpan.textContent = 'Completed';
+                }
+            } catch (error) {
+                console.error(`Error checking ${network} status:`, error);
+            }
+        }
+
+        async function checkAllNetworks() {
+            for (const network of Object.keys(NETWORKS)) {
+                await checkNetworkStatus(network);
+            }
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            
+            const percentage = (completedTxs / 12) * 100;
+            progressFill.style.width = percentage + '%';
+            progressText.textContent = `${completedTxs} / 12 transactions completed`;
+            
+            if (completedTxs === 12) {
+                progressText.innerHTML += ' <span style="color: #51cf66;">✓ All tokens enabled!</span>';
+            }
+        }
+    </script>
+</body>
+</html>

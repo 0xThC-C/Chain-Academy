@@ -1,0 +1,70 @@
+{
+  "ProgressiveEscrowV7": {
+    "polygon": {
+      "chainId": 137,
+      "address": "0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3",
+      "explorer": "https://polygonscan.com/address/0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3",
+      "rpcUrl": "https://polygon-rpc.com/",
+      "nativeCurrency": "MATIC",
+      "supportedTokens": {
+        "ETH": "0x0000000000000000000000000000000000000000",
+        "USDC": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+        "USDT": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
+      }
+    },
+    "base": {
+      "chainId": 8453,
+      "address": "0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3",
+      "explorer": "https://basescan.org/address/0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3",
+      "rpcUrl": "https://mainnet.base.org/",
+      "nativeCurrency": "ETH",
+      "supportedTokens": {
+        "ETH": "0x0000000000000000000000000000000000000000",
+        "USDC": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "USDT": "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2"
+      }
+    },
+    "optimism": {
+      "chainId": 10,
+      "address": "0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3",
+      "explorer": "https://optimistic.etherscan.io/address/0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3",
+      "rpcUrl": "https://mainnet.optimism.io/",
+      "nativeCurrency": "ETH",
+      "supportedTokens": {
+        "ETH": "0x0000000000000000000000000000000000000000",
+        "USDC": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+        "USDT": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58"
+      }
+    },
+    "arbitrum": {
+      "chainId": 42161,
+      "address": "0x2a9d167e30195ba5fd29cfc09622be0d02da91be",
+      "explorer": "https://arbiscan.io/address/0x2a9d167e30195ba5fd29cfc09622be0d02da91be",
+      "rpcUrl": "https://arb1.arbitrum.io/rpc/",
+      "nativeCurrency": "ETH",
+      "supportedTokens": {
+        "ETH": "0x0000000000000000000000000000000000000000",
+        "USDC": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+        "USDT": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
+      }
+    }
+  },
+  "deploymentInfo": {
+    "version": "V7_RemixOptimized",
+    "compiler": "0.8.20",
+    "optimization": {
+      "enabled": true,
+      "viaIR": true,
+      "runs": 100
+    },
+    "deployedAt": "2025-08-13",
+    "features": [
+      "Progressive Payment System",
+      "Multi-Token Support", 
+      "Heartbeat Monitoring",
+      "Session Timeout Protection",
+      "Emergency Controls",
+      "Replay Attack Prevention"
+    ]
+  }
+}

@@ -76,34 +76,35 @@ module.exports = {
       chainId: 84531,
       gasPrice: "auto"
     },
-    // 🚀 MAINNETS - Para produção (comentado por segurança)
-    /* 
-    ethereum: {
-      url: process.env.ETHEREUM_RPC_URL || "",
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 1
-    },
+    // 🚀 L2 MAINNETS - Para produção
     polygon: {
-      url: process.env.POLYGON_RPC_URL || "",
+      url: process.env.POLYGON_RPC_URL || "https://polygon-rpc.com",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 137
+      chainId: 137,
+      gasPrice: 30000000000, // 30 gwei
+      timeout: 120000
     },
     arbitrum: {
-      url: process.env.ARBITRUM_RPC_URL || "",
+      url: process.env.ARBITRUM_RPC_URL || "https://arb1.arbitrum.io/rpc",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 42161
+      chainId: 42161,
+      gasPrice: 100000000, // 0.1 gwei
+      timeout: 120000
     },
     optimism: {
-      url: process.env.OPTIMISM_RPC_URL || "",
+      url: process.env.OPTIMISM_RPC_URL || "https://mainnet.optimism.io",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 10
+      chainId: 10,
+      gasPrice: 1000000, // 0.001 gwei
+      timeout: 120000
     },
     base: {
-      url: process.env.BASE_RPC_URL || "",
+      url: process.env.BASE_RPC_URL || "https://mainnet.base.org",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 8453
+      chainId: 8453,
+      gasPrice: 1000000, // 0.001 gwei
+      timeout: 120000
     }
-    */
   },
   namedAccounts: {
     deployer: {

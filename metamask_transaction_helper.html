@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask Transaction Helper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .network {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .network h3 {
+            margin-top: 0;
+            color: #555;
+        }
+        button {
+            background: #f6851b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            width: 100%;
+        }
+        button:hover {
+            background: #e2761b;
+        }
+        .info {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        .warning {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦊 MetaMask Transaction Helper</h1>
+        
+        <div class="info">
+            <strong>Como usar:</strong>
+            <ol>
+                <li>Certifique-se de estar conectado com a wallet owner</li>
+                <li>Mude para a rede correta no MetaMask</li>
+                <li>Clique no botão da transação desejada</li>
+                <li>O MetaMask abrirá com a transação pronta</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Importante:</strong> Se o MetaMask não mostrar o campo de hex data, vá em:
+            <br>Settings → Advanced → Show Hex Data (ative esta opção)
+        </div>
+
+        <!-- ARBITRUM -->
+        <div class="network">
+            <h3>🌐 Arbitrum One</h3>
+            <button onclick="sendTransaction('arbitrum', 'ETH')">Habilitar ETH</button>
+            <button onclick="sendTransaction('arbitrum', 'USDC')">Habilitar USDC</button>
+            <button onclick="sendTransaction('arbitrum', 'USDT')">Habilitar USDT</button>
+        </div>
+
+        <!-- BASE -->
+        <div class="network">
+            <h3>🔵 Base</h3>
+            <button onclick="sendTransaction('base', 'ETH')">Habilitar ETH</button>
+            <button onclick="sendTransaction('base', 'USDC')">Habilitar USDC</button>
+            <button onclick="sendTransaction('base', 'USDT')">Habilitar USDT</button>
+        </div>
+
+        <!-- OPTIMISM -->
+        <div class="network">
+            <h3>🔴 Optimism</h3>
+            <button onclick="sendTransaction('optimism', 'ETH')">Habilitar ETH</button>
+            <button onclick="sendTransaction('optimism', 'USDC')">Habilitar USDC</button>
+            <button onclick="sendTransaction('optimism', 'USDT')">Habilitar USDT</button>
+        </div>
+
+        <!-- POLYGON -->
+        <div class="network">
+            <h3>🟣 Polygon</h3>
+            <button onclick="sendTransaction('polygon', 'ETH')">Habilitar ETH</button>
+            <button onclick="sendTransaction('polygon', 'USDC')">Habilitar USDC</button>
+            <button onclick="sendTransaction('polygon', 'USDT')">Habilitar USDT</button>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center; color: #666;">
+            Contract: <code>0x8B173c2E4C84b4bdD8c656F3d47Bc4259594Bd48</code>
+        </div>
+    </div>
+
+    <script>
+        const CONTRACT = '0x8B173c2E4C84b4bdD8c656F3d47Bc4259594Bd48';
+        
+        const TRANSACTION_DATA = {
+            'ETH': '0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000',
+            'arbitrum': {
+                'USDC': '0xeb0835bf000000000000000000000000af88d065e77c8cc2239327c5edb3a432268e5831',
+                'USDT': '0xeb0835bf000000000000000000000000fd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9'
+            },
+            'base': {
+                'USDC': '0xeb0835bf000000000000000000000000833589fcd6edb6e08f4c7c32d4f71b54bda02913',
+                'USDT': '0xeb0835bf000000000000000000000000fde4c96c8593536e31f229ea8f37b2ada2699bb2'
+            },
+            'optimism': {
+                'USDC': '0xeb0835bf0000000000000000000000000b2c639c533813f4aa9d7837caf62653d097ff85',
+                'USDT': '0xeb0835bf00000000000000000000000094b008aa00579c1307b0ef2c499ad98a8ce58e58'
+            },
+            'polygon': {
+                'USDC': '0xeb0835bf0000000000000000000000002791bca1f2de4661ed88a30c99a7a9449aa84174',
+                'USDT': '0xeb0835bf000000000000000000000000c2132d05d31c914a87c6611c10748aeb04b58e8f'
+            }
+        };
+
+        async function sendTransaction(network, token) {
+            if (!window.ethereum) {
+                alert('Por favor, instale o MetaMask!');
+                return;
+            }
+
+            try {
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                
+                const data = token === 'ETH' ? TRANSACTION_DATA.ETH : TRANSACTION_DATA[network][token];
+                
+                const params = {
+                    from: accounts[0],
+                    to: CONTRACT,
+                    data: data,
+                    value: '0x0'
+                };
+
+                const txHash = await ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [params]
+                });
+
+                alert(`Transação enviada!\nHash: ${txHash}\n\nAguarde a confirmação antes de prosseguir.`);
+            } catch (error) {
+                console.error(error);
+                if (error.code === 4001) {
+                    alert('Transação cancelada pelo usuário.');
+                } else {
+                    alert('Erro: ' + error.message);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

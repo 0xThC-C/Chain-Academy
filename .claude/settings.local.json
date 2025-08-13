@@ -155,7 +155,10 @@
       "Bash(git rm:*)",
       "Bash(git push:*)",
       "Bash(npx tailwindcss:*)",
-      "WebFetch(domain:arbiscan.io)"
+      "WebFetch(domain:arbiscan.io)",
+      "Bash(python3:*)",
+      "Bash(npm update:*)",
+      "Bash(cast call:*)"
     ],
     "deny": []
   }

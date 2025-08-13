@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enable Tokens - Direct Transaction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        h1 { color: #ff0000; text-align: center; }
+        .tx-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background: #333;
+        }
+        .tx-data {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 5px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover { background: #cc0000; }
+        .network-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .info {
+            background: #444;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Enable Tokens via MetaMask</h1>
+        
+        <div class="info">
+            <p><strong>Contract:</strong> 0x8B173c2E4C84b4bdD8c656F3d47Bc4259594Bd48</p>
+            <p><strong>How to use:</strong></p>
+            <ol>
+                <li>Click any button below</li>
+                <li>MetaMask will open with the transaction ready</li>
+                <li>Make sure you're on the correct network</li>
+                <li>Confirm the transaction</li>
+            </ol>
+        </div>
+
+        <!-- ARBITRUM -->
+        <div class="tx-section">
+            <div class="network-title">🌐 Arbitrum One (Chain ID: 42161)</div>
+            
+            <div>Enable ETH:</div>
+            <div class="tx-data">0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000</div>
+            <button onclick="sendTx('0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000')">Send ETH Enable Transaction</button>
+            
+            <div style="margin-top: 15px;">Enable USDC:</div>
+            <div class="tx-data">0xeb0835bf000000000000000000000000af88d065e77c8cc2239327c5edb3a432268e5831</div>
+            <button onclick="sendTx('0xeb0835bf000000000000000000000000af88d065e77c8cc2239327c5edb3a432268e5831')">Send USDC Enable Transaction</button>
+            
+            <div style="margin-top: 15px;">Enable USDT:</div>
+            <div class="tx-data">0xeb0835bf000000000000000000000000fd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9</div>
+            <button onclick="sendTx('0xeb0835bf000000000000000000000000fd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9')">Send USDT Enable Transaction</button>
+        </div>
+
+        <!-- BASE -->
+        <div class="tx-section">
+            <div class="network-title">🔵 Base (Chain ID: 8453)</div>
+            
+            <div>Enable ETH:</div>
+            <div class="tx-data">0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000</div>
+            <button onclick="sendTx('0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000')">Send ETH Enable Transaction</button>
+            
+            <div style="margin-top: 15px;">Enable USDC:</div>
+            <div class="tx-data">0xeb0835bf000000000000000000000000833589fcd6edb6e08f4c7c32d4f71b54bda02913</div>
+            <button onclick="sendTx('0xeb0835bf000000000000000000000000833589fcd6edb6e08f4c7c32d4f71b54bda02913')">Send USDC Enable Transaction</button>
+            
+            <div style="margin-top: 15px;">Enable USDT:</div>
+            <div class="tx-data">0xeb0835bf000000000000000000000000fde4c96c8593536e31f229ea8f37b2ada2699bb2</div>
+            <button onclick="sendTx('0xeb0835bf000000000000000000000000fde4c96c8593536e31f229ea8f37b2ada2699bb2')">Send USDT Enable Transaction</button>
+        </div>
+
+        <!-- OPTIMISM -->
+        <div class="tx-section">
+            <div class="network-title">🔴 Optimism (Chain ID: 10)</div>
+            
+            <div>Enable ETH:</div>
+            <div class="tx-data">0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000</div>
+            <button onclick="sendTx('0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000')">Send ETH Enable Transaction</button>
+            
+            <div style="margin-top: 15px;">Enable USDC:</div>
+            <div class="tx-data">0xeb0835bf0000000000000000000000000b2c639c533813f4aa9d7837caf62653d097ff85</div>
+            <button onclick="sendTx('0xeb0835bf0000000000000000000000000b2c639c533813f4aa9d7837caf62653d097ff85')">Send USDC Enable Transaction</button>
+            
+            <div style="margin-top: 15px;">Enable USDT:</div>
+            <div class="tx-data">0xeb0835bf00000000000000000000000094b008aa00579c1307b0ef2c499ad98a8ce58e58</div>
+            <button onclick="sendTx('0xeb0835bf00000000000000000000000094b008aa00579c1307b0ef2c499ad98a8ce58e58')">Send USDT Enable Transaction</button>
+        </div>
+
+        <!-- POLYGON -->
+        <div class="tx-section">
+            <div class="network-title">🟣 Polygon (Chain ID: 137)</div>
+            
+            <div>Enable ETH:</div>
+            <div class="tx-data">0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000</div>
+            <button onclick="sendTx('0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000')">Send ETH Enable Transaction</button>
+            
+            <div style="margin-top: 15px;">Enable USDC:</div>
+            <div class="tx-data">0xeb0835bf0000000000000000000000002791bca1f2de4661ed88a30c99a7a9449aa84174</div>
+            <button onclick="sendTx('0xeb0835bf0000000000000000000000002791bca1f2de4661ed88a30c99a7a9449aa84174')">Send USDC Enable Transaction</button>
+            
+            <div style="margin-top: 15px;">Enable USDT:</div>
+            <div class="tx-data">0xeb0835bf000000000000000000000000c2132d05d31c914a87c6611c10748aeb04b58e8f</div>
+            <button onclick="sendTx('0xeb0835bf000000000000000000000000c2132d05d31c914a87c6611c10748aeb04b58e8f')">Send USDT Enable Transaction</button>
+        </div>
+
+        <div class="info" style="margin-top: 30px;">
+            <p><strong>⚠️ Important:</strong></p>
+            <ul>
+                <li>You must be the contract owner</li>
+                <li>Switch to the correct network before each transaction</li>
+                <li>Each transaction costs gas fees</li>
+                <li>Wait for confirmation before proceeding to the next</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const CONTRACT_ADDRESS = '0x8B173c2E4C84b4bdD8c656F3d47Bc4259594Bd48';
+
+        async function sendTx(data) {
+            if (typeof window.ethereum === 'undefined') {
+                alert('Please install MetaMask!');
+                return;
+            }
+
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                
+                const transactionParameters = {
+                    to: CONTRACT_ADDRESS,
+                    from: accounts[0],
+                    data: data,
+                };
+
+                const txHash = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [transactionParameters],
+                });
+
+                alert(`Transaction sent! Hash: ${txHash}`);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Transaction failed: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

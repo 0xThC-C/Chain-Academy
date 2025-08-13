@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Transaction Sender</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .transaction {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .network-title {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 6px;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button.success {
+            background: #28a745;
+        }
+        button.success:hover {
+            background: #218838;
+        }
+        .info {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 20px 0;
+        }
+        code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🚀 Enable Tokens Directly</h1>
+        
+        <div class="info">
+            <strong>Contract:</strong> <code>0x8B173c2E4C84b4bdD8c656F3d47Bc4259594Bd48</code>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Antes de começar:</strong>
+            <ul style="margin: 5px 0; padding-left: 20px;">
+                <li>Você deve ser o owner do contrato</li>
+                <li>Mude para a rede correta antes de cada transação</li>
+                <li>Tenha ETH/MATIC para gas</li>
+            </ul>
+        </div>
+
+        <!-- Status -->
+        <div id="status" class="status"></div>
+
+        <!-- Arbitrum -->
+        <div class="transaction">
+            <div class="network-title">🌐 Arbitrum One (Chain ID: 42161)</div>
+            <button onclick="send('42161', 'ETH', '0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000')">
+                Enable ETH
+            </button>
+            <button onclick="send('42161', 'USDC', '0xeb0835bf000000000000000000000000af88d065e77c8cc2239327c5edb3a432268e5831')">
+                Enable USDC
+            </button>
+            <button onclick="send('42161', 'USDT', '0xeb0835bf000000000000000000000000fd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9')">
+                Enable USDT
+            </button>
+        </div>
+
+        <!-- Base -->
+        <div class="transaction">
+            <div class="network-title">🔵 Base (Chain ID: 8453)</div>
+            <button onclick="send('8453', 'ETH', '0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000')">
+                Enable ETH
+            </button>
+            <button onclick="send('8453', 'USDC', '0xeb0835bf000000000000000000000000833589fcd6edb6e08f4c7c32d4f71b54bda02913')">
+                Enable USDC
+            </button>
+            <button onclick="send('8453', 'USDT', '0xeb0835bf000000000000000000000000fde4c96c8593536e31f229ea8f37b2ada2699bb2')">
+                Enable USDT
+            </button>
+        </div>
+
+        <!-- Optimism -->
+        <div class="transaction">
+            <div class="network-title">🔴 Optimism (Chain ID: 10)</div>
+            <button onclick="send('10', 'ETH', '0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000')">
+                Enable ETH
+            </button>
+            <button onclick="send('10', 'USDC', '0xeb0835bf0000000000000000000000000b2c639c533813f4aa9d7837caf62653d097ff85')">
+                Enable USDC
+            </button>
+            <button onclick="send('10', 'USDT', '0xeb0835bf00000000000000000000000094b008aa00579c1307b0ef2c499ad98a8ce58e58')">
+                Enable USDT
+            </button>
+        </div>
+
+        <!-- Polygon -->
+        <div class="transaction">
+            <div class="network-title">🟣 Polygon (Chain ID: 137)</div>
+            <button onclick="send('137', 'ETH', '0xeb0835bf0000000000000000000000000000000000000000000000000000000000000000')">
+                Enable ETH
+            </button>
+            <button onclick="send('137', 'USDC', '0xeb0835bf0000000000000000000000002791bca1f2de4661ed88a30c99a7a9449aa84174')">
+                Enable USDC
+            </button>
+            <button onclick="send('137', 'USDT', '0xeb0835bf000000000000000000000000c2132d05d31c914a87c6611c10748aeb04b58e8f')">
+                Enable USDT
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const CONTRACT = '0x8B173c2E4C84b4bdD8c656F3d47Bc4259594Bd48';
+        
+        function showStatus(message, isError = false) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = isError ? 'status error' : 'status success';
+        }
+
+        async function send(expectedChainId, token, data) {
+            if (!window.ethereum) {
+                showStatus('❌ Wallet não detectada! Instale MetaMask, Rabby ou outra wallet.', true);
+                return;
+            }
+
+            try {
+                // Request account access
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                
+                // Check current chain
+                const currentChainId = await ethereum.request({ method: 'eth_chainId' });
+                const currentChainIdDec = parseInt(currentChainId, 16).toString();
+                
+                if (currentChainIdDec !== expectedChainId) {
+                    showStatus(`❌ Rede errada! Mude para a rede com Chain ID ${expectedChainId}`, true);
+                    
+                    // Try to switch network
+                    try {
+                        await ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0x' + parseInt(expectedChainId).toString(16) }],
+                        });
+                    } catch (switchError) {
+                        console.error('Failed to switch network:', switchError);
+                        return;
+                    }
+                }
+
+                // Send transaction
+                showStatus(`📤 Enviando transação para habilitar ${token}...`);
+                
+                const txHash = await ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [{
+                        from: accounts[0],
+                        to: CONTRACT,
+                        data: data,
+                        value: '0x0'
+                    }]
+                });
+
+                showStatus(`✅ Transação enviada! Hash: ${txHash.substring(0, 10)}...`);
+                
+                // Mark button as done
+                event.target.textContent = '✓ ' + event.target.textContent;
+                event.target.classList.add('success');
+                event.target.disabled = true;
+                
+            } catch (error) {
+                console.error('Transaction error:', error);
+                
+                if (error.code === 4001) {
+                    showStatus('❌ Transação cancelada pelo usuário', true);
+                } else if (error.code === -32602) {
+                    showStatus('❌ Parâmetros inválidos', true);
+                } else {
+                    showStatus(`❌ Erro: ${error.message || 'Erro desconhecido'}`, true);
+                }
+            }
+        }
+
+        // Check if Web3 is available on load
+        window.addEventListener('load', () => {
+            if (!window.ethereum) {
+                showStatus('⚠️ Nenhuma wallet detectada. Instale MetaMask, Rabby ou outra wallet Web3.', true);
+            }
+        });
+    </script>
+</body>
+</html>
