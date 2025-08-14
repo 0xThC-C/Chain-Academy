@@ -1,5 +1,5 @@
-// Progressive Escrow V4 Multi-L2 Configuration
-// Chain Academy Mentorship Platform - Mainnet Ready
+// Progressive Escrow V7 Multi-L2 Configuration
+// Chain Academy Mentorship Platform - V7 RemixOptimized Ready
 
 // Progressive Escrow V7 contract addresses for all supported L2 networks
 export const PROGRESSIVE_ESCROW_ADDRESSES = {
@@ -10,7 +10,7 @@ export const PROGRESSIVE_ESCROW_ADDRESSES = {
   polygon: '0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3'
 } as const;
 
-// USDC token addresses for each L2 network
+// USDC token addresses for each L2 network (auto-enabled in V7)
 export const USDC_ADDRESSES = {
   // L2 Mainnets
   base: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
@@ -19,7 +19,7 @@ export const USDC_ADDRESSES = {
   polygon: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174'
 } as const;
 
-// USDT token addresses for each L2 network
+// USDT token addresses for each L2 network (auto-enabled in V7)
 export const USDT_ADDRESSES = {
   // L2 Mainnets
   base: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2',
@@ -53,8 +53,8 @@ export const BLOCK_EXPLORERS = {
   [CHAIN_IDS.polygon]: 'https://polygonscan.com'
 } as const;
 
-// Progressive Escrow V4 ABI (L2-optimized from useProgressivePayment.ts)
-export const PROGRESSIVE_ESCROW_V4_ABI = [
+// Progressive Escrow V7 ABI (RemixOptimized)
+export const PROGRESSIVE_ESCROW_V7_ABI = [
   // Read functions
   {
     inputs: [{ name: 'sessionId', type: 'bytes32' }],
@@ -117,6 +117,13 @@ export const PROGRESSIVE_ESCROW_V4_ABI = [
     stateMutability: 'view',
     type: 'function'
   },
+  {
+    inputs: [{ name: 'token', type: 'address' }],
+    name: 'isTokenSupported',
+    outputs: [{ name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function'
+  },
   // Write functions
   {
     inputs: [
@@ -135,6 +142,13 @@ export const PROGRESSIVE_ESCROW_V4_ABI = [
   {
     inputs: [{ name: 'sessionId', type: 'bytes32' }],
     name: 'startProgressiveSession',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [{ name: 'sessionId', type: 'bytes32' }],
+    name: 'checkAndExpireSession',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function'
@@ -178,13 +192,61 @@ export const PROGRESSIVE_ESCROW_V4_ABI = [
     stateMutability: 'nonpayable',
     type: 'function'
   },
+  {
+    inputs: [{ name: 'sessionId', type: 'bytes32' }],
+    name: 'autoCompleteSession',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [{ name: 'sessionId', type: 'bytes32' }],
+    name: 'cancelSession',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  // V7 New functions
+  {
+    inputs: [
+      { name: 'totalAmount', type: 'uint256' },
+      { name: 'elapsedMinutes', type: 'uint256' },
+      { name: 'durationMinutes', type: 'uint256' }
+    ],
+    name: 'calculateMaxRelease',
+    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'pure',
+    type: 'function'
+  },
   // Events
   {
     anonymous: false,
     inputs: [
       { indexed: true, name: 'sessionId', type: 'bytes32' },
+      { indexed: true, name: 'student', type: 'address' },
       { indexed: true, name: 'mentor', type: 'address' },
-      { indexed: false, name: 'amount', type: 'uint256' }
+      { indexed: false, name: 'amount', type: 'uint256' },
+      { indexed: false, name: 'token', type: 'address' }
+    ],
+    name: 'SessionCreated',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: 'sessionId', type: 'bytes32' },
+      { indexed: false, name: 'startTime', type: 'uint256' }
+    ],
+    name: 'SessionStarted',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: 'sessionId', type: 'bytes32' },
+      { indexed: false, name: 'amount', type: 'uint256' },
+      { indexed: false, name: 'totalReleased', type: 'uint256' },
+      { indexed: false, name: 'timestamp', type: 'uint256' }
     ],
     name: 'ProgressivePaymentReleased',
     type: 'event'
@@ -193,7 +255,8 @@ export const PROGRESSIVE_ESCROW_V4_ABI = [
     anonymous: false,
     inputs: [
       { indexed: true, name: 'sessionId', type: 'bytes32' },
-      { indexed: false, name: 'timestamp', type: 'uint256' }
+      { indexed: false, name: 'pausedAt', type: 'uint256' },
+      { indexed: false, name: 'reason', type: 'string' }
     ],
     name: 'SessionPaused',
     type: 'event'
@@ -202,9 +265,57 @@ export const PROGRESSIVE_ESCROW_V4_ABI = [
     anonymous: false,
     inputs: [
       { indexed: true, name: 'sessionId', type: 'bytes32' },
-      { indexed: false, name: 'timestamp', type: 'uint256' }
+      { indexed: false, name: 'resumedAt', type: 'uint256' }
     ],
     name: 'SessionResumed',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: 'sessionId', type: 'bytes32' },
+      { indexed: false, name: 'mentorAmount', type: 'uint256' },
+      { indexed: false, name: 'platformFee', type: 'uint256' },
+      { indexed: false, name: 'completedAt', type: 'uint256' }
+    ],
+    name: 'SessionCompleted',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: 'sessionId', type: 'bytes32' },
+      { indexed: false, name: 'refundAmount', type: 'uint256' },
+      { indexed: false, name: 'cancelledAt', type: 'uint256' }
+    ],
+    name: 'SessionCancelled',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: 'sessionId', type: 'bytes32' },
+      { indexed: false, name: 'refundAmount', type: 'uint256' }
+    ],
+    name: 'SessionExpired',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: 'sessionId', type: 'bytes32' },
+      { indexed: false, name: 'timestamp', type: 'uint256' }
+    ],
+    name: 'HeartbeatReceived',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: 'token', type: 'address' },
+      { indexed: false, name: 'supported', type: 'bool' }
+    ],
+    name: 'TokenSupportUpdated',
     type: 'event'
   }
 ] as const;
@@ -267,7 +378,7 @@ export const getProgressiveEscrowAddress = (chainId: number): string => {
   
   const address = PROGRESSIVE_ESCROW_ADDRESSES[chainKey];
   if (!address) {
-    throw new Error(`⚠️ Progressive Escrow not deployed on ${chainKey}`);
+    throw new Error(`⚠️ Progressive Escrow V7 not deployed on ${chainKey}`);
   }
   
   return address;
@@ -361,7 +472,7 @@ export const validateDeploymentStatus = (chainId: number): {
     return {
       isDeployed: true,
       contractAddress,
-      message: `Progressive Escrow V4 deployed on ${chainName}`
+      message: `Progressive Escrow V7 deployed on ${chainName}`
     };
   } catch (error) {
     return {
@@ -387,16 +498,17 @@ export const getNetworkConfig = (chainId: number) => {
   };
 };
 
-// Session status enum matching the smart contract
+// Session status enum matching the V7 smart contract
 export enum SessionStatus {
   Created = 0,
   Active = 1,
   Paused = 2,
   Completed = 3,
-  Cancelled = 4
+  Cancelled = 4,
+  Expired = 5 // New in V7
 }
 
-// Session data interface
+// V7 Session data interface
 export interface SessionData {
   mentorId: number;
   mentorName: string;
@@ -409,7 +521,7 @@ export interface SessionData {
   prerequisites?: string;
 }
 
-// Progressive session data interface
+// V7 Progressive session data interface
 export interface ProgressiveSessionData {
   sessionId: string;
   student: string;
@@ -428,7 +540,7 @@ export interface ProgressiveSessionData {
   surveyCompleted: boolean;
 }
 
-// Booking transaction interface
+// V7 Booking transaction interface
 export interface BookingTransaction {
   sessionId?: number;
   student: string;
@@ -444,14 +556,14 @@ export interface BookingTransaction {
   chainId: number;
 }
 
-// ABI alias for backward compatibility
-export const PROGRESSIVE_ESCROW_ABI = PROGRESSIVE_ESCROW_V4_ABI;
+// Main exports for V7
+export const PROGRESSIVE_ESCROW_ABI = PROGRESSIVE_ESCROW_V7_ABI;
 
-// Legacy compatibility exports for gradual migration
+// Legacy compatibility exports (pointing to V7)
 export const MENTORSHIP_CONTRACT_ADDRESS = PROGRESSIVE_ESCROW_ADDRESSES;
 export const USDC_CONTRACT_ADDRESS = USDC_ADDRESSES;
 export const USDT_CONTRACT_ADDRESS = USDT_ADDRESSES;
-export const MENTORSHIP_CONTRACT_ABI = PROGRESSIVE_ESCROW_V4_ABI;
+export const MENTORSHIP_CONTRACT_ABI = PROGRESSIVE_ESCROW_V7_ABI;
 
 // Legacy helper functions for compatibility
 export const getContractAddress = getProgressiveEscrowAddress;
@@ -469,3 +581,11 @@ export const getMainnetInfo = () => ({
   usdtAddress: getCurrentUSDTAddress(),
   isTestnet: false
 });
+
+// V7 specific constants
+export const CONTRACT_VERSION = 'V7';
+export const PLATFORM_FEE_PERCENT = 10;
+export const HEARTBEAT_INTERVAL = 30; // seconds
+export const GRACE_PERIOD = 60; // seconds
+export const SESSION_START_TIMEOUT = 15 * 60; // 15 minutes in seconds
+export const AUTO_RELEASE_DELAY = 7 * 24 * 60 * 60; // 7 days in seconds

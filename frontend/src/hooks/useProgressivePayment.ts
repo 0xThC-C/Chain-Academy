@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAccount, useChainId } from 'wagmi';
 import { useWriteContract, useReadContract, useWatchContractEvent } from 'wagmi';
 import { parseEther, formatEther, encodePacked, keccak256 } from 'viem';
-import { getProgressiveEscrowAddress, isSupportedChain } from '../contracts/ProgressiveEscrowV4';
+import { getProgressiveEscrowAddress, isSupportedChain } from '../contracts/ProgressiveEscrowV7';
 import { payerPresenceTracker, PayerPresenceTracking } from '../services/PayerPresenceTracker';
 
 interface SecurityValidation {
