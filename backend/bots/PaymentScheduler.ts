@@ -19,6 +19,8 @@ export class PaymentScheduler {
 
   private getDefaultConfig(): BotConfig {
     return {
+      enabled: true,
+      cronSchedule: '0 2 * * *', // 2 AM UTC daily
       executionTime: '02:00', // 2 AM UTC
       paymentDelayHours: 24,
       maxRetryAttempts: 3,
@@ -88,7 +90,10 @@ export class PaymentScheduler {
 
     if (this.task) {
       this.task.stop();
-      this.task.destroy();
+      // Note: destroy() may not be available in all versions of node-cron
+      if (typeof (this.task as any).destroy === 'function') {
+        (this.task as any).destroy();
+      }
       this.task = null;
     }
 
@@ -140,7 +145,7 @@ export class PaymentScheduler {
       console.log(`[PaymentScheduler] Bot execution ${executionId} completed successfully in ${duration}ms`);
       
     } catch (error) {
-      record.error = error.message;
+      record.error = (error as Error).message;
       console.error(`[PaymentScheduler] Bot execution ${executionId} failed:`, error);
       
       // Send alert for failed executions

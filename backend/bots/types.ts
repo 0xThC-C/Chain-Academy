@@ -1,5 +1,34 @@
 // Bot-specific types for Chain Academy Payment Automation
 
+// Session status enum from ProgressiveEscrowV7 contract
+export enum SessionStatus {
+  Created = 0,
+  Started = 1,
+  Paused = 2,
+  Completed = 3,
+  Cancelled = 4,
+  Expired = 5
+}
+
+// ProgressiveSession struct from V7 contract
+export interface ProgressiveSession {
+  sessionId: string; // bytes32 as string
+  student: string;
+  mentor: string;
+  paymentToken: string;
+  totalAmount: bigint;
+  releasedAmount: bigint;
+  sessionDuration: number; // in minutes
+  startTime: number; // timestamp
+  lastHeartbeat: number; // timestamp
+  pausedTime: number; // accumulated paused time in seconds
+  createdAt: number; // timestamp
+  status: SessionStatus;
+  isActive: boolean;
+  isPaused: boolean;
+  surveyCompleted: boolean;
+}
+
 export interface PendingPayment {
   sessionId: string;
   mentorAddress: string;
@@ -28,8 +57,15 @@ export interface PaymentResult {
 }
 
 export interface BotConfig {
+  // Bot Identity
+  name?: string;
+  version?: string;
+  environment?: string;
+  
+  // Core Settings
   enabled: boolean;
   cronSchedule: string;
+  dailyCronSchedule?: string;
   executionTime: string;
   paymentDelayHours: number;
   maxRetryAttempts: number;
@@ -39,6 +75,39 @@ export interface BotConfig {
   gasLimits: {
     [chainId: number]: bigint;
   };
+  
+  // Payment Processing
+  maxPaymentsPerRun?: number;
+  minPaymentAmount?: bigint;
+  maxGasPrice?: bigint;
+  priorityFee?: bigint;
+  retryAttempts?: number;
+  retryDelay?: number;
+  
+  // Monitoring & Notifications
+  webhookUrl?: string;
+  logLevel?: 'debug' | 'info' | 'warn' | 'error';
+  healthCheckInterval?: number;
+  maxExecutionTime?: number;
+  
+  // Discord Notifications
+  discordWebhookUrl?: string;
+  enableDiscordNotifications?: boolean;
+  
+  // Emergency Controls
+  emergencyStop?: boolean;
+  maintenanceMode?: boolean;
+  
+  // Security
+  allowedOperators?: string[];
+  requireOperatorSignature?: boolean;
+  
+  // V7 specific configurations
+  sessionTrackingEnabled?: boolean; // Track session IDs externally
+  heartbeatCheckEnabled?: boolean; // Monitor session heartbeats
+  autoPauseCheckEnabled?: boolean; // Check for sessions that need auto-pause
+  minAutoReleaseDelay?: number; // Minimum delay before auto-release (hours)
+  sessionIdStorage?: string; // Path to store tracked session IDs
 }
 
 export interface ChainConfig {
@@ -46,9 +115,17 @@ export interface ChainConfig {
   name: string;
   rpcUrl: string;
   contractAddress: string;
+  gasLimit?: bigint;
   gasPrice?: bigint;
   maxFeePerGas?: bigint;
   maxPriorityFeePerGas?: bigint;
+  isTestnet?: boolean;
+  explorerUrl?: string;
+  nativeCurrency?: {
+    name: string;
+    symbol: string;
+    decimals: number;
+  };
 }
 
 export interface NotificationPayload {
@@ -99,4 +176,21 @@ export interface PaymentLog {
   error?: string;
   transactionHash?: string;
   chainId: number;
+}
+
+// Session tracking for V7 (since getAllActiveSessions is not available)
+export interface TrackedSession {
+  sessionId: string;
+  chainId: number;
+  createdAt: number;
+  lastChecked: number;
+  status: SessionStatus;
+  isTracked: boolean; // Whether we're actively tracking this session
+  completedButNotReleased?: boolean; // Session completed but payment not yet released
+}
+
+export interface SessionTracker {
+  sessions: Map<string, TrackedSession>; // sessionId -> TrackedSession
+  lastFullScan: number; // Last time we did a comprehensive scan
+  scanInterval: number; // How often to perform full scans (milliseconds)
 }

@@ -16,7 +16,13 @@
     "bot:stop": "pm2 stop payment-bot",
     "bot:logs": "pm2 logs payment-bot",
     "bot:restart": "pm2 restart payment-bot",
-    "bot:status": "pm2 describe payment-bot"
+    "bot:status": "pm2 describe payment-bot",
+    "bot:v7:test": "ts-node bots/test-v7-bot.ts",
+    "bot:v7:migrate": "ts-node bots/migrate-to-v7.ts",
+    "bot:v7:migrate:dry": "ts-node bots/migrate-to-v7.ts -- --dry-run",
+    "bot:v7:health": "ts-node -e \"import('./bots/DailyPaymentBot').then(m => { const bot = new m.DailyPaymentBot(require('./bots/MainnetBotConfig').MAINNET_BOT_CONFIG, require('./bots/MainnetBotConfig').MAINNET_CHAIN_CONFIGS); console.log('Bot Health:', bot.isHealthy()); console.log('Session Tracker:', bot.getSessionTrackerStatus()); })\"",
+    "bot:compile": "tsc --noEmit --project bots/tsconfig.json",
+    "bot:discord:test": "ts-node bots/test-discord-notifications.ts"
   },
   "keywords": [
     "blockchain",
@@ -46,6 +52,11 @@
     "socket.io": "^4.8.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "axios": "^1.7.7"
+  },
+  "devDependencies": {
+    "@types/node-cron": "^3.0.11",
+    "@types/node-fetch": "^2.6.4"
   }
 }

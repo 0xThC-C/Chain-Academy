@@ -1,0 +1,72 @@
+{
+  "contractVersion": "8.0.0",
+  "deploymentDate": "2025-08-19",
+  "networks": {
+    "base": {
+      "chainId": 8453,
+      "name": "Base",
+      "rpcUrl": "https://mainnet.base.org",
+      "contractAddress": "0x3397ec53a2749210618d797424036694f4bcc745",
+      "blockExplorer": "https://basescan.org",
+      "explorerUrl": "https://basescan.org/address/0x3397ec53a2749210618d797424036694f4bcc745"
+    },
+    "optimism": {
+      "chainId": 10,
+      "name": "Optimism",
+      "rpcUrl": "https://mainnet.optimism.io",
+      "contractAddress": "0x3397ec53a2749210618d797424036694f4bcc745",
+      "blockExplorer": "https://optimistic.etherscan.io",
+      "explorerUrl": "https://optimistic.etherscan.io/address/0x3397ec53a2749210618d797424036694f4bcc745"
+    },
+    "arbitrum": {
+      "chainId": 42161,
+      "name": "Arbitrum",
+      "rpcUrl": "https://arb1.arbitrum.io/rpc",
+      "contractAddress": "0x7c188086d6c335a6ebbe0acbc0ace458f668ce5f",
+      "blockExplorer": "https://arbiscan.io",
+      "explorerUrl": "https://arbiscan.io/address/0x7c188086d6c335a6ebbe0acbc0ace458f668ce5f"
+    },
+    "polygon": {
+      "chainId": 137,
+      "name": "Polygon",
+      "rpcUrl": "https://polygon-rpc.com",
+      "contractAddress": "0x3397ec53a2749210618d797424036694f4bcc745",
+      "blockExplorer": "https://polygonscan.com",
+      "explorerUrl": "https://polygonscan.com/address/0x3397ec53a2749210618d797424036694f4bcc745"
+    }
+  },
+  "features": {
+    "enhancedStateMachine": true,
+    "multipleRefundPathways": true,
+    "autoRecoverySystem": true,
+    "disputeResolution": true,
+    "healthMonitoring": true,
+    "progressivePayments": true,
+    "emergencyControls": true,
+    "gasOptimized": true
+  },
+  "supportedTokens": {
+    "ETH": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "USDT": {
+      "base": "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2",
+      "optimism": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+      "arbitrum": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+      "polygon": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
+    },
+    "USDC": {
+      "base": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "optimism": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+      "arbitrum": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "polygon": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"
+    }
+  },
+  "platformFee": 10,
+  "sessionLimits": {
+    "minDuration": 1800,
+    "maxDuration": 28800,
+    "heartbeatTimeout": 900,
+    "maxPauseDuration": 7200,
+    "disputeTimeout": 604800,
+    "autoCompleteDelay": 86400
+  }
+}

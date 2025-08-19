@@ -158,7 +158,21 @@
       "WebFetch(domain:arbiscan.io)",
       "Bash(python3:*)",
       "Bash(npm update:*)",
-      "Bash(cast call:*)"
+      "Bash(cast call:*)",
+      "Bash(export BASE_PROGRESSIVE_ESCROW_V7=0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3)",
+      "Bash(export OPTIMISM_PROGRESSIVE_ESCROW_V7=0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3)",
+      "Bash(export ARBITRUM_PROGRESSIVE_ESCROW_V7=0x2a9d167e30195ba5fd29cfc09622be0d02da91be)",
+      "Bash(export POLYGON_PROGRESSIVE_ESCROW_V7=0xc7c306300dfe17b927fab5a5a600a7f3ba6691d3)",
+      "Bash(BOT_DISCORD_WEBHOOK_URL=\"https://discord.com/api/webhooks/1406986268591525938/fPt_n2ITnBv8LDb7yT3ud0BS8t8CnHc8j8Ww6rM_PvnOlWsv9LsLY36d3bXRXD_WSVz7\" npm run bot:discord:test \"\")",
+      "Bash(./bots/deploy-v7-production.sh:*)",
+      "Bash(set -a)",
+      "Bash(set +a)",
+      "Bash(npx:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(ts-node:*)"
     ],
     "deny": []
   }

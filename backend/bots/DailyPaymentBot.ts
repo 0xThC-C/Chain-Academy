@@ -7,16 +7,24 @@ import {
   PaymentBatch,
   PaymentStatus,
   PaymentLog,
-  BotMetrics
+  BotMetrics,
+  ProgressiveSession,
+  SessionStatus,
+  TrackedSession,
+  SessionTracker
 } from './types';
 import { PaymentScheduler } from './PaymentScheduler';
+import { DiscordNotifier, DiscordWebhookConfig, AlertType } from './DiscordNotifier';
 
-// Progressive Escrow V4 ABI for autoCompleteSession
+// Progressive Escrow V7 ABI for payment automation
 const ESCROW_ABI = [
-  'function autoCompleteSession(uint256 sessionId) external',
-  'function getSessionDetails(uint256 sessionId) external view returns (tuple(address mentor, address student, uint256 amount, address token, uint8 status, uint256 completedAt, bool manuallyConfirmed))',
-  'function getAllActiveSessions() external view returns (uint256[])',
-  'event SessionAutoCompleted(uint256 indexed sessionId, address indexed mentor, uint256 amount)'
+  'function autoCompleteSession(bytes32 sessionId) external',
+  'function getSession(bytes32 sessionId) external view returns (tuple(bytes32 sessionId, address student, address mentor, address paymentToken, uint256 totalAmount, uint256 releasedAmount, uint256 sessionDuration, uint256 startTime, uint256 lastHeartbeat, uint256 pausedTime, uint256 createdAt, uint8 status, bool isActive, bool isPaused, bool surveyCompleted))',
+  'function getAvailablePayment(bytes32 sessionId) external view returns (uint256)',
+  'function needsHeartbeat(bytes32 sessionId) external view returns (bool)',
+  'function shouldAutoPause(bytes32 sessionId) external view returns (bool)',
+  'event SessionAutoCompleted(bytes32 indexed sessionId, address indexed mentor, uint256 amount)',
+  'event SessionCompleted(bytes32 indexed sessionId, address indexed mentor, uint256 totalReleased)'
 ];
 
 export class DailyPaymentBot {
@@ -30,6 +38,11 @@ export class DailyPaymentBot {
   private scheduler: PaymentScheduler;
   private isRunning: boolean = false;
   private isPaused: boolean = false;
+  
+  // V7 specific additions
+  private sessionTracker: SessionTracker;
+  private readonly fs = require('fs').promises;
+  private discordNotifier: DiscordNotifier;
 
   constructor(config: BotConfig, chainConfigs: ChainConfig[]) {
     this.config = config;
@@ -39,6 +52,23 @@ export class DailyPaymentBot {
     this.contracts = new Map();
     this.paymentLogs = new Map();
     this.scheduler = new PaymentScheduler(this);
+    
+    // Initialize V7 session tracker
+    this.sessionTracker = {
+      sessions: new Map(),
+      lastFullScan: 0,
+      scanInterval: 6 * 60 * 60 * 1000 // 6 hours
+    };
+
+    // Initialize Discord notifier
+    const discordConfig: DiscordWebhookConfig = {
+      webhookUrl: process.env.BOT_DISCORD_WEBHOOK_URL || '',
+      username: 'Chain Academy Bot',
+      enabled: process.env.BOT_ENABLE_DISCORD_NOTIFICATIONS === 'true',
+      retryAttempts: 3,
+      retryDelay: 2000
+    };
+    this.discordNotifier = new DiscordNotifier(discordConfig);
     
     // Initialize metrics
     this.metrics = {
@@ -56,7 +86,22 @@ export class DailyPaymentBot {
       this.setupChain(chainConfig);
     });
 
+    // Load existing session tracking data
+    this.loadSessionTracker().catch(error => {
+      console.warn(`[DailyPaymentBot] Could not load session tracker data: ${error.message}`);
+    });
+
     console.log(`[DailyPaymentBot] Initialized with ${chainConfigs.length} chains`);
+    
+    // Send startup notification
+    if (this.discordNotifier.isEnabled()) {
+      this.discordNotifier.notifyBotStartup(
+        config.version || '2.0.0',
+        chainConfigs.length
+      ).catch(error => {
+        console.error('[DailyPaymentBot] Failed to send startup notification:', error);
+      });
+    }
   }
 
   private setupChain(chainConfig: ChainConfig): void {
@@ -146,8 +191,38 @@ export class DailyPaymentBot {
       console.log(`[DailyPaymentBot] Daily execution completed in ${executionTime}ms`);
       console.log(`[DailyPaymentBot] Results: ${results.filter(r => r.success).length} successful, ${results.filter(r => !r.success).length} failed`);
       
+      // Send execution summary to Discord
+      if (this.discordNotifier.isEnabled() && results.length > 0) {
+        const successful = results.filter(r => r.success).length;
+        const failed = results.filter(r => !r.success).length;
+        const totalGasUsed = results.reduce((sum, r) => sum + (r.gasUsed || BigInt(0)), BigInt(0));
+        
+        this.discordNotifier.notifyExecutionSummary(
+          results.length,
+          successful,
+          failed,
+          totalGasUsed,
+          executionTime
+        ).catch(error => {
+          console.error('[DailyPaymentBot] Failed to send execution summary:', error);
+        });
+      }
+      
     } catch (error) {
       console.error('[DailyPaymentBot] Daily execution failed:', error);
+      
+      // Send error notification to Discord
+      if (this.discordNotifier.isEnabled()) {
+        await this.discordNotifier.notifyError(
+          'Daily Execution Failed',
+          (error as Error).message,
+          {
+            'Execution Time': new Date().toISOString(),
+            'Bot Version': this.config.version || '2.0.0'
+          }
+        );
+      }
+      
       // Send alert to admin
       await this.sendAlert('Daily execution failed', error);
     } finally {
@@ -157,63 +232,92 @@ export class DailyPaymentBot {
   }
 
   /**
-   * Scan all chains for sessions that need automatic payment
+   * Scan all chains for sessions that need automatic payment (V7 Compatible)
    */
   public async scanPendingPayments(): Promise<PendingPayment[]> {
     const allPendingPayments: PendingPayment[] = [];
     const cutoffTime = Date.now() - (this.config.paymentDelayHours * 60 * 60 * 1000);
 
-    for (const [chainId, contract] of this.contracts) {
+    console.log(`[DailyPaymentBot] Starting V7 session scan with cutoff time: ${new Date(cutoffTime).toISOString()}`);
+
+    // Since V7 doesn't have getAllActiveSessions, we need to use our session tracker
+    await this.updateSessionTracker();
+
+    for (const [sessionId, trackedSession] of this.sessionTracker.sessions) {
+      if (!trackedSession.isTracked) continue;
+
       try {
-        console.log(`[DailyPaymentBot] Scanning chain ${chainId}...`);
+        const contract = this.contracts.get(trackedSession.chainId);
+        if (!contract) {
+          console.warn(`[DailyPaymentBot] No contract found for chain ${trackedSession.chainId}`);
+          continue;
+        }
+
+        console.log(`[DailyPaymentBot] Checking session ${sessionId} on chain ${trackedSession.chainId}`);
         
-        // Get all active sessions from the contract
-        const sessionIds = await contract.getAllActiveSessions();
-        console.log(`[DailyPaymentBot] Found ${sessionIds.length} active sessions on chain ${chainId}`);
-
-        for (const sessionId of sessionIds) {
-          try {
-            // Get session details
-            const sessionDetails = await contract.getSessionDetails(sessionId);
+        // Get current session details from contract
+        const sessionDetails: ProgressiveSession = await contract.getSession(sessionId);
+        
+        // Check if session is completed and eligible for auto-release
+        if (sessionDetails.status === SessionStatus.Completed && 
+            sessionDetails.isActive && 
+            !sessionDetails.surveyCompleted) {
+          
+          // Check if enough time has passed since completion (based on startTime + duration)
+          const sessionEndTime = (Number(sessionDetails.startTime) + (sessionDetails.sessionDuration * 60)) * 1000;
+          const timeElapsed = Date.now() - sessionEndTime;
+          
+          if (timeElapsed >= this.config.paymentDelayHours * 60 * 60 * 1000) {
+            // Get available payment amount
+            const availablePayment = await contract.getAvailablePayment(sessionId);
             
-            // Check if session is completed but not manually confirmed
-            if (sessionDetails.status === 2 && // COMPLETED status
-                !sessionDetails.manuallyConfirmed &&
-                Number(sessionDetails.completedAt) * 1000 < cutoffTime) {
-              
-              // Calculate proportional payment based on actual session time
-              const actualDuration = sessionDetails.actualDuration || 60; // Default 60 minutes
-              const scheduledDuration = sessionDetails.scheduledDuration || 60;
-              const percentageCompleted = Math.min(100, (actualDuration / scheduledDuration) * 100);
-              const proportionalAmount = (sessionDetails.amount * BigInt(Math.round(percentageCompleted))) / BigInt(100);
-
+            if (availablePayment > 0) {
               const pendingPayment: PendingPayment = {
-                sessionId: sessionId.toString(),
+                sessionId: sessionDetails.sessionId,
                 mentorAddress: sessionDetails.mentor,
                 studentAddress: sessionDetails.student,
-                amount: proportionalAmount, // Proportional to actual session time
-                fullAmount: sessionDetails.amount, // Original full amount
-                percentageCompleted: Math.round(percentageCompleted),
-                tokenAddress: sessionDetails.token,
-                chainId: chainId,
-                completedAt: Number(sessionDetails.completedAt),
-                actualDuration,
-                scheduledDuration,
-                manualConfirmationDeadline: Number(sessionDetails.completedAt) + (24 * 60 * 60) // 24h from completion
+                amount: availablePayment,
+                fullAmount: sessionDetails.totalAmount,
+                percentageCompleted: this.calculateCompletionPercentage(sessionDetails),
+                tokenAddress: sessionDetails.paymentToken,
+                chainId: trackedSession.chainId,
+                completedAt: Math.floor(sessionEndTime / 1000),
+                actualDuration: sessionDetails.sessionDuration, // V7 tracks this automatically
+                scheduledDuration: sessionDetails.sessionDuration,
+                manualConfirmationDeadline: Math.floor(sessionEndTime / 1000) + (24 * 60 * 60)
               };
               
               allPendingPayments.push(pendingPayment);
-              console.log(`[DailyPaymentBot] Found pending payment: Session ${sessionId} on chain ${chainId}`);
+              console.log(`[DailyPaymentBot] Found pending payment: Session ${sessionId} (${ethers.formatEther(availablePayment)} tokens)`);
+              
+              // Mark session as having pending payment
+              trackedSession.completedButNotReleased = true;
             }
-          } catch (error) {
-            console.error(`[DailyPaymentBot] Error checking session ${sessionId} on chain ${chainId}:`, error);
+          } else {
+            console.log(`[DailyPaymentBot] Session ${sessionId} completed but waiting for delay period (${Math.round(timeElapsed / 60000)} min elapsed)`);
+          }
+        } else {
+          // Update tracked session status
+          trackedSession.status = sessionDetails.status;
+          trackedSession.lastChecked = Date.now();
+          
+          // If session is no longer active, stop tracking it
+          if (!sessionDetails.isActive) {
+            trackedSession.isTracked = false;
+            console.log(`[DailyPaymentBot] Session ${sessionId} is no longer active, stopped tracking`);
           }
         }
+        
       } catch (error) {
-        console.error(`[DailyPaymentBot] Error scanning chain ${chainId}:`, error);
+        console.error(`[DailyPaymentBot] Error checking session ${sessionId}:`, error);
+        // Don't remove from tracking on temporary errors
       }
     }
 
+    // Save updated session tracker
+    await this.saveSessionTracker();
+
+    console.log(`[DailyPaymentBot] V7 scan completed. Found ${allPendingPayments.length} pending payments`);
     return allPendingPayments;
   }
 
@@ -353,6 +457,21 @@ export class DailyPaymentBot {
         
         console.log(`[DailyPaymentBot] Payment successful: ${tx.hash}`);
         
+        // Send Discord notification for successful payment
+        if (this.discordNotifier.isEnabled()) {
+          const chainConfig = this.chainConfigs.get(payment.chainId);
+          this.discordNotifier.notifyPaymentSuccess(
+            payment.sessionId,
+            payment.mentorAddress,
+            payment.amount,
+            'USDC', // TODO: Get actual token symbol
+            chainConfig?.name || `Chain ${payment.chainId}`,
+            tx.hash
+          ).catch(error => {
+            console.error('[DailyPaymentBot] Failed to send payment notification:', error);
+          });
+        }
+        
         return {
           sessionId: payment.sessionId,
           success: true,
@@ -490,5 +609,142 @@ export class DailyPaymentBot {
 
   public stopScheduler(): void {
     this.scheduler.stop();
+  }
+
+  // V7 Specific Helper Methods
+
+  /**
+   * Calculate completion percentage for a session
+   */
+  private calculateCompletionPercentage(session: ProgressiveSession): number {
+    // V7 calculates this automatically based on elapsed time vs duration
+    // If the session is completed, it's 100% by definition
+    if (session.status === SessionStatus.Completed) {
+      return 100;
+    }
+    
+    const now = Date.now() / 1000;
+    const elapsed = now - Number(session.startTime) - (session.pausedTime / 1000);
+    const scheduledDuration = session.sessionDuration * 60; // Convert minutes to seconds
+    
+    return Math.min(100, Math.max(0, (elapsed / scheduledDuration) * 100));
+  }
+
+  /**
+   * Update session tracker from contract events and saved data
+   */
+  private async updateSessionTracker(): Promise<void> {
+    const now = Date.now();
+    
+    // If we haven't done a full scan recently, we might need to discover new sessions
+    // For V7, we'll need to rely on event monitoring or external session tracking
+    if (now - this.sessionTracker.lastFullScan > this.sessionTracker.scanInterval) {
+      console.log('[DailyPaymentBot] Session tracker needs update - checking for new sessions');
+      
+      // In a full implementation, this would scan recent contract events
+      // For now, we'll just mark that we've done a scan
+      this.sessionTracker.lastFullScan = now;
+      
+      // TODO: Add event monitoring for SessionCreated events to discover new sessions
+      // This could be done by scanning recent blocks for SessionCreated events
+    }
+
+    // Clean up old inactive sessions
+    for (const [sessionId, session] of this.sessionTracker.sessions) {
+      // Remove sessions that haven't been checked in 7 days and are not being tracked
+      if (!session.isTracked && (now - session.lastChecked) > (7 * 24 * 60 * 60 * 1000)) {
+        this.sessionTracker.sessions.delete(sessionId);
+        console.log(`[DailyPaymentBot] Removed old session from tracker: ${sessionId}`);
+      }
+    }
+  }
+
+  /**
+   * Add a session to the tracker (call this when sessions are created)
+   */
+  public addSessionToTracker(sessionId: string, chainId: number): void {
+    const trackedSession: TrackedSession = {
+      sessionId,
+      chainId,
+      createdAt: Date.now(),
+      lastChecked: Date.now(),
+      status: SessionStatus.Created,
+      isTracked: true,
+      completedButNotReleased: false
+    };
+    
+    this.sessionTracker.sessions.set(sessionId, trackedSession);
+    console.log(`[DailyPaymentBot] Added session ${sessionId} to tracker`);
+    
+    // Save immediately
+    this.saveSessionTracker().catch(error => {
+      console.error('[DailyPaymentBot] Failed to save session tracker:', error);
+    });
+  }
+
+  /**
+   * Load session tracker from file
+   */
+  private async loadSessionTracker(): Promise<void> {
+    const filePath = this.getSessionTrackerPath();
+    
+    try {
+      const data = await this.fs.readFile(filePath, 'utf8');
+      const parsed = JSON.parse(data);
+      
+      // Reconstruct the Map from saved data
+      this.sessionTracker = {
+        sessions: new Map(parsed.sessions || []),
+        lastFullScan: parsed.lastFullScan || 0,
+        scanInterval: parsed.scanInterval || (6 * 60 * 60 * 1000)
+      };
+      
+      console.log(`[DailyPaymentBot] Loaded ${this.sessionTracker.sessions.size} sessions from tracker`);
+    } catch (error) {
+      if ((error as any).code !== 'ENOENT') {
+        console.error('[DailyPaymentBot] Error loading session tracker:', error);
+      }
+      // File doesn't exist or is corrupted, start fresh
+    }
+  }
+
+  /**
+   * Save session tracker to file
+   */
+  private async saveSessionTracker(): Promise<void> {
+    const filePath = this.getSessionTrackerPath();
+    
+    try {
+      const dataToSave = {
+        sessions: Array.from(this.sessionTracker.sessions.entries()),
+        lastFullScan: this.sessionTracker.lastFullScan,
+        scanInterval: this.sessionTracker.scanInterval,
+        savedAt: new Date().toISOString()
+      };
+      
+      await this.fs.writeFile(filePath, JSON.stringify(dataToSave, null, 2));
+    } catch (error) {
+      console.error('[DailyPaymentBot] Failed to save session tracker:', error);
+    }
+  }
+
+  /**
+   * Get the path for session tracker storage
+   */
+  private getSessionTrackerPath(): string {
+    return this.config.sessionIdStorage || './data/session-tracker.json';
+  }
+
+  /**
+   * Get session tracker status for monitoring
+   */
+  public getSessionTrackerStatus(): any {
+    return {
+      totalSessions: this.sessionTracker.sessions.size,
+      activeSessions: Array.from(this.sessionTracker.sessions.values()).filter(s => s.isTracked).length,
+      pendingSessions: Array.from(this.sessionTracker.sessions.values()).filter(s => s.completedButNotReleased).length,
+      lastFullScan: new Date(this.sessionTracker.lastFullScan).toISOString(),
+      nextFullScan: new Date(this.sessionTracker.lastFullScan + this.sessionTracker.scanInterval).toISOString()
+    };
   }
 }

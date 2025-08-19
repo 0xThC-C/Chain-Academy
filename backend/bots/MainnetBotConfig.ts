@@ -17,7 +17,7 @@ export const MAINNET_CHAIN_CONFIGS: ChainConfig[] = [
     chainId: 8453, // Base
     name: 'Base',
     rpcUrl: process.env.BOT_BASE_RPC_URL || 'https://mainnet.base.org',
-    contractAddress: requireEnv('BASE_PROGRESSIVE_ESCROW'),
+    contractAddress: requireEnv('BASE_PROGRESSIVE_ESCROW_V8'),
     gasLimit: BigInt(300000),
     maxFeePerGas: BigInt(50000000000), // 50 gwei
     maxPriorityFeePerGas: BigInt(2000000000), // 2 gwei
@@ -33,7 +33,7 @@ export const MAINNET_CHAIN_CONFIGS: ChainConfig[] = [
     chainId: 10, // Optimism
     name: 'Optimism',
     rpcUrl: process.env.BOT_OPTIMISM_RPC_URL || 'https://mainnet.optimism.io',
-    contractAddress: requireEnv('OPTIMISM_PROGRESSIVE_ESCROW'),
+    contractAddress: requireEnv('OPTIMISM_PROGRESSIVE_ESCROW_V8'),
     gasLimit: BigInt(300000),
     maxFeePerGas: BigInt(30000000000), // 30 gwei
     maxPriorityFeePerGas: BigInt(1000000000), // 1 gwei
@@ -49,7 +49,7 @@ export const MAINNET_CHAIN_CONFIGS: ChainConfig[] = [
     chainId: 42161, // Arbitrum
     name: 'Arbitrum',
     rpcUrl: process.env.BOT_ARBITRUM_RPC_URL || 'https://arb1.arbitrum.io/rpc',
-    contractAddress: requireEnv('ARBITRUM_PROGRESSIVE_ESCROW'),
+    contractAddress: requireEnv('ARBITRUM_PROGRESSIVE_ESCROW_V8'),
     gasLimit: BigInt(300000),
     maxFeePerGas: BigInt(10000000000), // 10 gwei
     maxPriorityFeePerGas: BigInt(100000000), // 0.1 gwei
@@ -65,7 +65,7 @@ export const MAINNET_CHAIN_CONFIGS: ChainConfig[] = [
     chainId: 137, // Polygon
     name: 'Polygon',
     rpcUrl: process.env.BOT_POLYGON_RPC_URL || 'https://polygon-rpc.com',
-    contractAddress: requireEnv('POLYGON_PROGRESSIVE_ESCROW'),
+    contractAddress: requireEnv('POLYGON_PROGRESSIVE_ESCROW_V8'),
     gasLimit: BigInt(300000),
     maxFeePerGas: BigInt(30000000000), // 30 gwei
     maxPriorityFeePerGas: BigInt(2000000000), // 2 gwei
@@ -90,6 +90,10 @@ export const MAINNET_BOT_CONFIG: BotConfig = {
   enabled: process.env.BOT_ENABLED === 'true',
   cronSchedule: process.env.BOT_CHECK_INTERVAL || '0 */6 * * *', // Every 6 hours
   dailyCronSchedule: process.env.BOT_DAILY_CHECK || '0 2 * * *', // Daily at 2 AM UTC
+  executionTime: process.env.BOT_EXECUTION_TIME || '02:00', // 2 AM UTC
+  maxRetryAttempts: parseInt(process.env.BOT_RETRY_ATTEMPTS || '3'),
+  supportedChains: [8453, 10, 42161, 137], // Base, Optimism, Arbitrum, Polygon
+  emergencyPauseAddress: process.env.BOT_EMERGENCY_PAUSE_ADDRESS || '',
 
   // Payment Processing
   paymentDelayHours: parseInt(process.env.BOT_PAYMENT_DELAY_HOURS || '24'), // 24 hours
@@ -107,8 +111,7 @@ export const MAINNET_BOT_CONFIG: BotConfig = {
   maxGasPrice: BigInt(process.env.BOT_MAX_GAS_PRICE || '50000000000'), // 50 gwei
   priorityFee: BigInt(process.env.BOT_PRIORITY_FEE || '2000000000'), // 2 gwei
 
-  // Retry Logic
-  retryAttempts: parseInt(process.env.BOT_RETRY_ATTEMPTS || '3'),
+  // Retry Logic (retryAttempts is now maxRetryAttempts above)
   retryDelay: parseInt(process.env.BOT_RETRY_DELAY || '30000'), // 30 seconds
 
   // Monitoring & Notifications
@@ -126,7 +129,14 @@ export const MAINNET_BOT_CONFIG: BotConfig = {
 
   // Security
   allowedOperators: process.env.BOT_ALLOWED_OPERATORS?.split(',') || [],
-  requireOperatorSignature: process.env.BOT_REQUIRE_OPERATOR_SIGNATURE === 'true'
+  requireOperatorSignature: process.env.BOT_REQUIRE_OPERATOR_SIGNATURE === 'true',
+
+  // V7 Specific Configurations
+  sessionTrackingEnabled: process.env.BOT_V7_SESSION_TRACKING_ENABLED !== 'false', // Default: enabled
+  heartbeatCheckEnabled: process.env.BOT_V7_HEARTBEAT_CHECK_ENABLED === 'true',
+  autoPauseCheckEnabled: process.env.BOT_V7_AUTOPAUSE_CHECK_ENABLED === 'true',
+  minAutoReleaseDelay: parseInt(process.env.BOT_V7_MIN_AUTO_RELEASE_DELAY || '24'), // 24 hours default
+  sessionIdStorage: process.env.BOT_V7_SESSION_STORAGE_PATH || './data/session-tracker.json'
 };
 
 // Validation function
@@ -136,10 +146,10 @@ export function validateMainnetConfig(): void {
   // Check required environment variables
   const requiredVars = [
     'BOT_PRIVATE_KEY',
-    'BASE_PROGRESSIVE_ESCROW',
-    'OPTIMISM_PROGRESSIVE_ESCROW',
-    'ARBITRUM_PROGRESSIVE_ESCROW',
-    'POLYGON_PROGRESSIVE_ESCROW'
+    'BASE_PROGRESSIVE_ESCROW_V8',
+    'OPTIMISM_PROGRESSIVE_ESCROW_V8',
+    'ARBITRUM_PROGRESSIVE_ESCROW_V8',
+    'POLYGON_PROGRESSIVE_ESCROW_V8'
   ];
 
   const missingVars = requiredVars.filter(varName => !process.env[varName]);
