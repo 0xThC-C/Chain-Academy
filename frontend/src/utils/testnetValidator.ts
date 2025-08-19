@@ -2,7 +2,7 @@
 // Ensures the frontend is properly configured for testnet deployment
 
 import { CURRENT_CONFIG, validateEnvironment } from '../config/environment';
-import { getMainnetInfo, isTestnetMode } from '../contracts/ProgressiveEscrowV7';
+import { getMainnetInfo, isTestnetMode } from '../contracts/ProgressiveEscrowV8';
 import { TESTNET_CONTRACTS } from '../config/testnet';
 
 export interface ValidationResult {

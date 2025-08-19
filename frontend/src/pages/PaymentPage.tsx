@@ -24,7 +24,7 @@ import {
   getBlockExplorerUrl,
   isSupportedChain,
   type SupportedToken
-} from '../contracts/ProgressiveEscrowV7';
+} from '../contracts/ProgressiveEscrowV8';
 
 import PaymentSuccessModal from '../components/PaymentSuccessModal';
 import PaymentErrorModal from '../components/PaymentErrorModal';
