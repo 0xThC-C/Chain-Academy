@@ -54,3 +54,32 @@
   # Hardhat/Blockchain
   deployments/localhost/
   hardhat-node.log
+  
+  # CRITICAL SECURITY - NEVER COMMIT THESE
+  **/*private*
+  **/*secret*
+  **/*webhook*
+  **/*key*
+  **/.env*
+  **/logs/
+  **/*.log
+  
+  # Discord and Webhook URLs
+  *webhook*
+  *discord*
+  
+  # Backup and temp files
+  backup*/
+  temp/
+  tmp/
+  *.backup
+  *.bak
+  
+  # IDE and editor files
+  .claude/
+  **/.claude/
+  .vscode/settings.json
+  
+  # Security sensitive directories
+  backend/data/backups/
+  backend/security/secure-wallets/
