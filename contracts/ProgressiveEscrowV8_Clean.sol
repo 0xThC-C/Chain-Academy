@@ -227,6 +227,12 @@ contract ProgressiveEscrowV8 is ReentrancyGuard, Pausable, Ownable {
         bool healthy,
         string details
     );
+    
+    event HeartbeatReceived(
+        bytes32 indexed sessionId,
+        uint256 timestamp,
+        uint256 timeSinceLastHeartbeat
+    );
 
     // ============ CONSTRUCTOR ============
 
@@ -337,6 +343,7 @@ contract ProgressiveEscrowV8 is ReentrancyGuard, Pausable, Ownable {
         
         emit SessionCreated(_sessionId, msg.sender, _mentor, _amount, _paymentToken, _sessionDuration, _scheduledTime);
     }
+
 
     // ============ V8 SESSION LIFECYCLE ============
     
@@ -827,5 +834,193 @@ contract ProgressiveEscrowV8 is ReentrancyGuard, Pausable, Ownable {
         features[6] = "Emergency Controls";
         features[7] = "Gas Optimized";
         return features;
+    }
+
+    // ============ V7 COMPATIBILITY LAYER ============
+    
+    /**
+     * @dev V7 Compatibility - createProgressiveSession function
+     * @notice This function maintains compatibility with V7 frontend calls
+     * @notice Internally uses V8 enhanced logic while keeping V7 interface
+     */
+    function createProgressiveSession(
+        bytes32 sessionId,
+        address mentor,
+        address paymentToken,
+        uint256 amount,
+        uint256 durationMinutes,
+        uint256 /* nonce */
+    ) external payable nonReentrant whenNotPaused {
+        require(sessionId != bytes32(0), "Invalid session ID");
+        require(mentor != address(0) && mentor != msg.sender, "Invalid mentor");
+        require(sessions[sessionId].sessionId == bytes32(0), "Session exists");
+        require(amount > 0, "Invalid amount");
+        require(durationMinutes >= MIN_SESSION_DURATION && durationMinutes <= MAX_SESSION_DURATION, "Invalid duration");
+        require(supportedTokens[paymentToken], "Token not supported");
+        
+        // V7 Compatibility: Nonce is accepted but not strictly required in V8
+        // This allows V7 frontend to work without changes
+        // Note: nonce parameter is silenced as /* nonce */ to avoid unused parameter warning
+        
+        uint256 totalAmount;
+        
+        if (paymentToken == address(0)) {
+            // ETH payment
+            require(msg.value == amount, "ETH amount mismatch");
+            totalAmount = amount;
+        } else {
+            // ERC20 payment
+            require(msg.value == 0, "No ETH for ERC20");
+            IERC20(paymentToken).safeTransferFrom(msg.sender, address(this), amount);
+            totalAmount = amount;
+        }
+        
+        // V8: Create enhanced session with immediate scheduled time (V7 compatibility)
+        uint256 scheduledTime = block.timestamp + 60; // 1 minute from now for immediate sessions
+        
+        // V8: Use enhanced ProgressiveSession struct
+        ProgressiveSession storage session = sessions[sessionId];
+        session.sessionId = sessionId;
+        session.student = msg.sender;
+        session.mentor = mentor;
+        session.paymentToken = paymentToken;
+        session.totalAmount = totalAmount;
+        session.releasedAmount = 0;
+        session.sessionDuration = durationMinutes;
+        session.createdAt = block.timestamp;
+        session.startTime = 0;
+        session.lastHeartbeat = 0;
+        session.effectivePausedTime = 0;
+        session.lastActivityTime = block.timestamp;
+        session.status = SessionStatus.Created;
+        session.isActive = false;
+        session.isPaused = false;
+        session.surveyCompleted = false;
+        
+        // V8: Enhanced fields
+        session.stateTransitionCount = 1;
+        session.lastStateChange = block.timestamp;
+        session.emergencyLocked = false;
+        session.autoRecoveryEnabled = true;
+        session.recoveryAttempts = 0;
+        session.lastRecoveryAttempt = 0;
+        
+        emit SessionCreated(sessionId, msg.sender, mentor, totalAmount, paymentToken, durationMinutes, scheduledTime);
+    }
+    
+    /**
+     * @dev V7 Compatibility - startProgressiveSession function
+     * @notice Alias for startSession to maintain V7 compatibility
+     */
+    function startProgressiveSession(bytes32 _sessionId) external nonReentrant {
+        ProgressiveSession storage session = sessions[_sessionId];
+        require(session.sessionId != bytes32(0), "Session not found");
+        require(msg.sender == session.student || msg.sender == session.mentor, "Not authorized");
+        require(session.status == SessionStatus.Created, "Cannot start session");
+        require(!session.emergencyLocked, "Session locked");
+        
+        // V8: Enhanced state transition
+        _changeSessionStatus(session, SessionStatus.Active);
+        session.startTime = block.timestamp;
+        session.lastHeartbeat = block.timestamp;
+        session.lastActivityTime = block.timestamp;
+        session.isActive = true;
+        
+        emit SessionStarted(_sessionId, block.timestamp);
+    }
+    
+    /**
+     * @dev V7 Compatibility - getUserNonce function
+     * @notice Returns 0 for V8 (nonces not strictly required)
+     * @param user Address to get nonce for (unused in V8)
+     * @return Always returns 0 for V8 compatibility
+     */
+    function getUserNonce(address user) external pure returns (uint256) {
+        // V8 doesn't use nonces for session creation, return 0 for V7 compatibility
+        user; // Silence unused parameter warning
+        return 0;
+    }
+    
+    /**
+     * @dev V7 Compatibility - needsHeartbeat function
+     * @notice Checks if session needs a heartbeat
+     */
+    function needsHeartbeat(bytes32 _sessionId) external view returns (bool) {
+        ProgressiveSession memory session = sessions[_sessionId];
+        if (session.sessionId == bytes32(0) || session.status != SessionStatus.Active) {
+            return false;
+        }
+        
+        return (block.timestamp - session.lastHeartbeat) > HEARTBEAT_TIMEOUT;
+    }
+    
+    /**
+     * @dev V7 Compatibility - shouldAutoPause function
+     * @notice Checks if session should be auto-paused
+     */
+    function shouldAutoPause(bytes32 _sessionId) external view returns (bool) {
+        ProgressiveSession memory session = sessions[_sessionId];
+        if (session.sessionId == bytes32(0) || session.status != SessionStatus.Active) {
+            return false;
+        }
+        
+        return (block.timestamp - session.lastHeartbeat) > HEARTBEAT_TIMEOUT;
+    }
+    
+    /**
+     * @dev V7 Compatibility - getEffectiveElapsedTime function
+     * @notice Returns effective elapsed time accounting for pauses
+     */
+    function getEffectiveElapsedTime(bytes32 _sessionId) external view returns (uint256) {
+        ProgressiveSession memory session = sessions[_sessionId];
+        if (session.sessionId == bytes32(0) || session.startTime == 0) {
+            return 0;
+        }
+        
+        uint256 totalElapsed = block.timestamp - session.startTime;
+        return totalElapsed > session.effectivePausedTime ? 
+               totalElapsed - session.effectivePausedTime : 0;
+    }
+    
+    /**
+     * @dev V7 Compatibility - releaseProgressivePayment function
+     * @notice Alias for progressive payment release
+     */
+    function releaseProgressivePayment(bytes32 _sessionId) external {
+        // Use V8 enhanced payment logic
+        ProgressiveSession storage session = sessions[_sessionId];
+        require(session.sessionId != bytes32(0), "Session not found");
+        require(session.status == SessionStatus.Active, "Session not active");
+        require(msg.sender == session.student || msg.sender == session.mentor, "Not authorized");
+        
+        PaymentCalculation memory calc = calculateProgressivePayment(_sessionId);
+        if (calc.mentorAmount > 0) {
+            _releasePayment(session, calc.mentorAmount, calc.platformFee);
+        }
+    }
+    
+    /**
+     * @dev V7 Compatibility - updateHeartbeat function
+     * @notice Alias for sendHeartbeat
+     */
+    function updateHeartbeat(bytes32 _sessionId) external nonReentrant {
+        ProgressiveSession storage session = sessions[_sessionId];
+        require(session.sessionId != bytes32(0), "Session not found");
+        require(msg.sender == session.student || msg.sender == session.mentor, "Not authorized");
+        require(session.status == SessionStatus.Active, "Session not active");
+        require(!session.emergencyLocked, "Session locked");
+        
+        // V8: Enhanced heartbeat with pause detection
+        uint256 previousHeartbeat = session.lastHeartbeat;
+        session.lastHeartbeat = block.timestamp;
+        session.lastActivityTime = block.timestamp;
+        
+        // V8: Auto-unpause if paused and heartbeat received
+        if (session.isPaused && session.status == SessionStatus.Paused) {
+            _changeSessionStatus(session, SessionStatus.Active);
+            session.isPaused = false;
+        }
+        
+        emit HeartbeatReceived(_sessionId, block.timestamp, block.timestamp - previousHeartbeat);
     }
 }

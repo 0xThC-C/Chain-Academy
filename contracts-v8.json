@@ -1,38 +1,38 @@
 {
-  "contractVersion": "8.0.0",
-  "deploymentDate": "2025-08-19",
+  "contractVersion": "8.0.1",
+  "deploymentDate": "2025-08-24",
   "networks": {
     "base": {
       "chainId": 8453,
       "name": "Base",
       "rpcUrl": "https://mainnet.base.org",
-      "contractAddress": "0x3397ec53a2749210618d797424036694f4bcc745",
+      "contractAddress": "0x2a9d167e30195ba5fd29cfc09622be0d02da91be",
       "blockExplorer": "https://basescan.org",
-      "explorerUrl": "https://basescan.org/address/0x3397ec53a2749210618d797424036694f4bcc745"
+      "explorerUrl": "https://basescan.org/address/0x2a9d167e30195ba5fd29cfc09622be0d02da91be"
     },
     "optimism": {
       "chainId": 10,
       "name": "Optimism",
       "rpcUrl": "https://mainnet.optimism.io",
-      "contractAddress": "0x3397ec53a2749210618d797424036694f4bcc745",
+      "contractAddress": "0xd5bbf7f5449b805cb5479e6aa04e722c28aa9ba1",
       "blockExplorer": "https://optimistic.etherscan.io",
-      "explorerUrl": "https://optimistic.etherscan.io/address/0x3397ec53a2749210618d797424036694f4bcc745"
+      "explorerUrl": "https://optimistic.etherscan.io/address/0xd5bbf7f5449b805cb5479e6aa04e722c28aa9ba1"
     },
     "arbitrum": {
       "chainId": 42161,
       "name": "Arbitrum",
       "rpcUrl": "https://arb1.arbitrum.io/rpc",
-      "contractAddress": "0x7c188086d6c335a6ebbe0acbc0ace458f668ce5f",
+      "contractAddress": "0x74d6ae04f62fdd2d4942babad924ad6fc693329f",
       "blockExplorer": "https://arbiscan.io",
-      "explorerUrl": "https://arbiscan.io/address/0x7c188086d6c335a6ebbe0acbc0ace458f668ce5f"
+      "explorerUrl": "https://arbiscan.io/address/0x74d6ae04f62fdd2d4942babad924ad6fc693329f"
     },
     "polygon": {
       "chainId": 137,
       "name": "Polygon",
       "rpcUrl": "https://polygon-rpc.com",
-      "contractAddress": "0x3397ec53a2749210618d797424036694f4bcc745",
+      "contractAddress": "0x2a9d167e30195ba5fd29cfc09622be0d02da91be",
       "blockExplorer": "https://polygonscan.com",
-      "explorerUrl": "https://polygonscan.com/address/0x3397ec53a2749210618d797424036694f4bcc745"
+      "explorerUrl": "https://polygonscan.com/address/0x2a9d167e30195ba5fd29cfc09622be0d02da91be"
     }
   },
   "features": {

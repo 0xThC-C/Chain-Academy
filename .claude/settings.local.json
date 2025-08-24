@@ -172,7 +172,8 @@
       "Bash(cd:*)",
       "Bash(cd:*)",
       "Bash(cd:*)",
-      "Bash(ts-node:*)"
+      "Bash(ts-node:*)",
+      "Bash(./deploy-v8-bot.sh:*)"
     ],
     "deny": []
   }

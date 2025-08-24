@@ -3,11 +3,11 @@
 
 // Progressive Escrow V8 contract addresses for all supported L2 networks
 export const PROGRESSIVE_ESCROW_ADDRESSES = {
-  // L2 Mainnets (V8 DEPLOYED)
-  base: '0x3397ec53a2749210618d797424036694f4bcc745',
-  optimism: '0x3397ec53a2749210618d797424036694f4bcc745', 
-  arbitrum: '0x7c188086d6c335a6ebbe0acbc0ace458f668ce5f',
-  polygon: '0x3397ec53a2749210618d797424036694f4bcc745'
+  // L2 Mainnets (V8 FIXED - V7 Compatible)
+  base: '0x2a9d167e30195ba5fd29cfc09622be0d02da91be',
+  optimism: '0xd5bbf7f5449b805cb5479e6aa04e722c28aa9ba1', 
+  arbitrum: '0x74d6ae04f62fdd2d4942babad924ad6fc693329f',
+  polygon: '0x2a9d167e30195ba5fd29cfc09622be0d02da91be'
 } as const;
 
 // USDC token addresses for each L2 network (auto-enabled in V8)
