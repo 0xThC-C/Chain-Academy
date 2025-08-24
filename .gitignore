@@ -44,9 +44,12 @@
   build/
   dist/
 
-  # Environment files  
-  .env
-  .env.local
+  # Environment files - CRITICAL SECURITY
+  .env*
+  *.env*
+  backend/.env*
+  frontend/.env*
+  **/.env*
 
   # Hardhat/Blockchain
   deployments/localhost/
