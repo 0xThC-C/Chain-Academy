@@ -8,6 +8,7 @@
 import dotenv from 'dotenv';
 import { DailyPaymentBotV8 } from './bots/DailyPaymentBotV8';
 import { BotConfigV8, ChainConfigV8 } from './bots/V8Types';
+import { DiscordLogMonitor } from './monitoring/DiscordLogMonitor';
 
 // Load V8 environment configuration
 dotenv.config({ path: '.env.v8' });
@@ -154,26 +155,52 @@ async function main() {
 ║  🆕 V8 Features: Bug fixes & Enhanced monitoring  ║
 ║  🔧 Auto-recovery & Dispute handling              ║
 ║  📊 Precision payments & Health diagnostics       ║
+║  📢 Real-time Discord logging enabled             ║
 ╚═══════════════════════════════════════════════════╝
 `);
+
+  // Initialize Discord Log Monitor
+  const logMonitor = new DiscordLogMonitor({
+    discordWebhook: process.env.DISCORD_WEBHOOK_URL || '',
+    logLevel: 'info',
+    enableWalletMonitoring: true,
+    enableTransactionLogs: true,
+    enablePerformanceMetrics: true,
+    walletBalanceThreshold: '0.005',
+    reportInterval: 60
+  });
 
   try {
     console.log('🔍 Step 1: Validating V8 configuration...');
     validateEnvironment();
     console.log('✅ V8 configuration validation passed');
 
+    await logMonitor.logBotStatus('starting', 'V8 Bot validation completed successfully');
+
     console.log('\n🔧 Step 2: Creating V8 bot instance...');
     const config = createV8Config();
     const chainConfigs = createChainConfigs();
 
     console.log(`📊 Configured for ${chainConfigs.length} chains:`);
-    chainConfigs.forEach(chain => {
+    const chainSummary = chainConfigs.map(chain => {
       const v8Status = chain.v8Enabled ? '✅ V8 Ready' : '⏳ V7 Only';
       console.log(`   - ${chain.name} (${chain.chainId}): ${v8Status}`);
       if (chain.v8Enabled) {
         console.log(`     V8: ${chain.contractAddressV8}`);
       }
       console.log(`     V7: ${chain.contractAddress}`);
+      return {
+        name: chain.name,
+        chainId: chain.chainId,
+        v8Enabled: chain.v8Enabled,
+        v8Contract: chain.contractAddressV8,
+        v7Contract: chain.contractAddress
+      };
+    });
+
+    await logMonitor.logBotStatus('starting', `Bot configured for ${chainConfigs.length} chains`, {
+      chains: chainSummary,
+      walletAddress: config.walletAddress
     });
 
     const bot = new DailyPaymentBotV8(config, chainConfigs);
@@ -186,7 +213,17 @@ async function main() {
     if (healthInfo.issues.length > 0) {
       console.log('   Issues:');
       healthInfo.issues.forEach(issue => console.log(`     - ${issue}`));
+      await logMonitor.logSecurity('warning', 'Health check found issues', {
+        issues: healthInfo.issues,
+        details: healthInfo.details
+      });
     }
+
+    await logMonitor.logBotStatus('running', 'V8 bot health check completed', {
+      healthy: healthInfo.healthy,
+      details: healthInfo.details,
+      issues: healthInfo.issues
+    });
 
     console.log('\n✅ V8 bot initialization completed successfully!');
     console.log('🔄 Starting V8 automated payment processing...');
@@ -197,29 +234,66 @@ async function main() {
     console.log('\n📊 V8 Bot Status: RUNNING');
     console.log('💡 Use Ctrl+C to gracefully shutdown');
 
+    await logMonitor.logBotStatus('running', 'V8 Bot is now fully operational', {
+      status: 'RUNNING',
+      startTime: new Date().toISOString(),
+      walletAddress: config.walletAddress,
+      chainsEnabled: chainConfigs.filter(c => c.v8Enabled).length,
+      totalChains: chainConfigs.length
+    });
+
     // Graceful shutdown handler
-    process.on('SIGINT', () => {
+    process.on('SIGINT', async () => {
       console.log('\n🛑 Received SIGINT. Initiating graceful V8 shutdown...');
+      
+      await logMonitor.logBotStatus('stopping', 'Bot shutdown initiated by user signal', {
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString()
+      });
+      
       bot.stopScheduler();
-      setTimeout(() => {
+      logMonitor.stop();
+      
+      setTimeout(async () => {
         console.log('✅ V8 bot stopped successfully');
+        await logMonitor.logBotStatus('stopping', 'Bot shutdown completed successfully', {
+          finalUptime: process.uptime()
+        });
         process.exit(0);
       }, 2000);
     });
 
     // Keep the process running
-    process.on('uncaughtException', (error) => {
+    process.on('uncaughtException', async (error) => {
       console.error('💥 V8 Uncaught Exception:', error);
+      
+      await logMonitor.logError(error, 'Uncaught Exception - Bot will restart');
+      await logMonitor.logSecurity('critical', 'Bot crashed due to uncaught exception', {
+        error: error.message,
+        stack: error.stack
+      });
+      
       process.exit(1);
     });
 
-    process.on('unhandledRejection', (reason, promise) => {
+    process.on('unhandledRejection', async (reason, promise) => {
       console.error('💥 V8 Unhandled Rejection at:', promise, 'reason:', reason);
-      process.exit(1);
+      
+      await logMonitor.logError(new Error(String(reason)), 'Unhandled Promise Rejection');
+      await logMonitor.logSecurity('error', 'Unhandled promise rejection detected', {
+        reason: String(reason)
+      });
     });
+
 
   } catch (error) {
     console.error('❌ V8 bot startup failed:', error);
+    
+    await logMonitor.logError(error as Error, 'Bot startup failure');
+    await logMonitor.logSecurity('critical', 'Bot failed to start - manual intervention required', {
+      error: error instanceof Error ? error.message : String(error)
+    });
+    
     process.exit(1);
   }
 }

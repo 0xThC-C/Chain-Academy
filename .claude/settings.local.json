@@ -173,7 +173,11 @@
       "Bash(cd:*)",
       "Bash(cd:*)",
       "Bash(ts-node:*)",
-      "Bash(./deploy-v8-bot.sh:*)"
+      "Bash(./deploy-v8-bot.sh:*)",
+      "mcp__alchemy__fetchAddressTransactionHistory",
+      "WebFetch(domain:etherscan.io)",
+      "WebFetch(domain:optimistic.etherscan.io)",
+      "WebFetch(domain:polygonscan.com)"
     ],
     "deny": []
   }
