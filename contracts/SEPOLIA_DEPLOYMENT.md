@@ -60,7 +60,7 @@ Após obter ETH de teste, execute:
 
 ```bash
 cd /home/mathewsl/Chain\ Academy\ V2/contracts
-PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 npx hardhat run scripts/deploy-sepolia.js --network sepolia
+PRIVATE_KEY=YOUR_SECURE_PRIVATE_KEY_HERE npx hardhat run scripts/deploy-sepolia.js --network sepolia
 ```
 
 ### 3. Verificar no Explorer

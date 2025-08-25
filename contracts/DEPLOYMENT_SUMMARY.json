@@ -128,8 +128,8 @@
     "6. Run integration tests"
   ],
   "commands": {
-    "checkBalance": "PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 npm run check:sepolia-balance",
-    "deploy": "PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 npm run deploy:sepolia-v2",
+    "checkBalance": "PRIVATE_KEY=YOUR_PRIVATE_KEY npm run check:sepolia-balance",
+    "deploy": "PRIVATE_KEY=YOUR_PRIVATE_KEY npm run deploy:sepolia-v2",
     "localTest": "npm run deploy:local-test"
   }
 }

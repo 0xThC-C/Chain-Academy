@@ -145,7 +145,7 @@ Discord Webhook Test Script
 Usage: ts-node test-discord-notifications.ts <webhook_url>
 
 Example:
-  ts-node test-discord-notifications.ts "https://discord.com/api/webhooks/123456789/abcdef..."
+  ts-node test-discord-notifications.ts "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
 
 To get a Discord webhook URL:
 1. Go to your Discord server

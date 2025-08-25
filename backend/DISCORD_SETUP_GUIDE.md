@@ -45,14 +45,14 @@ O bot V7 agora possui um sistema completo de notificações Discord com:
 #### **Opção A: Variáveis de Ambiente**
 ```bash
 # No arquivo .env ou .env.production-v7
-BOT_DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/123456789/abcdef...
+BOT_DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN
 BOT_ENABLE_DISCORD_NOTIFICATIONS=true
 ```
 
 #### **Opção B: Configuração Manual**
 ```bash
 # Definir diretamente no terminal
-export BOT_DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/SEU_WEBHOOK_AQUI"
+export BOT_DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
 export BOT_ENABLE_DISCORD_NOTIFICATIONS=true
 ```
 
@@ -61,12 +61,12 @@ export BOT_ENABLE_DISCORD_NOTIFICATIONS=true
 #### **Teste Básico**
 ```bash
 cd backend
-npm run bot:discord:test "https://discord.com/api/webhooks/SEU_WEBHOOK_AQUI"
+npm run bot:discord:test "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
 ```
 
 #### **Teste com Variável de Ambiente**
 ```bash
-BOT_DISCORD_WEBHOOK_URL="https://discord.com/..." npm run bot:discord:test
+BOT_DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN" npm run bot:discord:test
 ```
 
 ---
@@ -211,7 +211,7 @@ pm2 logs payment-bot-v7 | grep -i discord
 nano .env.production-v7
 
 # Adicionar:
-BOT_DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/SEU_WEBHOOK
+BOT_DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN
 BOT_ENABLE_DISCORD_NOTIFICATIONS=true
 ```
 

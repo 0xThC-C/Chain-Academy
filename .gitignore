@@ -83,3 +83,60 @@
   # Security sensitive directories
   backend/data/backups/
   backend/security/secure-wallets/
+  
+  # ULTRA-SECURITY PATTERNS - NEVER COMMIT THESE
+  # Private keys and mnemonics (any format)
+  *private*key*
+  *mnemonic*
+  *seed*phrase*
+  *.pem
+  *.p12
+  *.pfx
+  
+  # API keys and tokens
+  *api*key*
+  *secret*key*
+  *access*token*
+  *auth*token*
+  *bearer*token*
+  *jwt*token*
+  
+  # Webhook URLs and endpoints
+  *webhook*url*
+  *webhook*endpoint*
+  *discord*webhook*
+  *telegram*webhook*
+  
+  # Backup and temporary files with potential secrets
+  *.backup
+  *.bak
+  *.tmp
+  *.temp
+  *backup*
+  *temp*
+  *temporary*
+  
+  # Logs that might contain sensitive data
+  *.log
+  *log*
+  logs/
+  **/logs/
+  
+  # Configuration files that might have secrets
+  config.json
+  config.yml
+  config.yaml
+  *config*.json
+  *config*.yml
+  *config*.yaml
+  
+  # Database exports and dumps
+  *.sql
+  *.dump
+  *.backup
+  
+  # Any file with 'secret' or 'private' in name
+  *secret*
+  *private*
+  *credential*
+  *password*
