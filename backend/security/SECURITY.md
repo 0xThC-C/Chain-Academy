@@ -173,15 +173,15 @@ await rotationSystem.emergencyRotation();
 
 ### Nova Carteira Gerada:
 - **Endereço**: `0x4370772caa2B2FC8E372f242a6CAA0A8293Fb765`
-- **Mnemônico**: `camera federal coyote bus oak snap bench expose indicate economy trick hip`
-- **Chave Privada**: `1e6bdf5e7f5f3670d239c1480ef74cc8d8b097603d429aee64b7f0f0f352f32d`
+- **Mnemônico**: `[REDACTED_FOR_SECURITY]`
+- **Chave Privada**: `[REDACTED_FOR_SECURITY]`
 
 ### Passos para Migração:
 
 1. **Atualizar Ambiente de Produção:**
    ```bash
    # No servidor de produção (NÃO no código)
-   export CHAIN_ACADEMY_BOT_PRIVATE_KEY=1e6bdf5e7f5f3670d239c1480ef74cc8d8b097603d429aee64b7f0f0f352f32d
+   export CHAIN_ACADEMY_BOT_PRIVATE_KEY=[REDACTED_FOR_SECURITY]
    ```
 
 2. **Atualizar Configuração do Bot:**

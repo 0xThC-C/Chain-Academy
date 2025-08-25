@@ -29,16 +29,16 @@ This guide covers deploying the enhanced ProgressiveEscrowV8 contract and bot sy
 cd contracts
 
 # Deploy to Base
-PRIVATE_KEY=3491d9302cfdf85ce6725844e2586c61b026b264b16777c47bda69be65383ffb npx hardhat run scripts/deploy-v8.js --network base
+PRIVATE_KEY=YOUR_SECURE_PRIVATE_KEY_HERE npx hardhat run scripts/deploy-v8.js --network base
 
 # Deploy to Optimism
-PRIVATE_KEY=3491d9302cfdf85ce6725844e2586c61b026b264b16777c47bda69be65383ffb npx hardhat run scripts/deploy-v8.js --network optimism
+PRIVATE_KEY=YOUR_SECURE_PRIVATE_KEY_HERE npx hardhat run scripts/deploy-v8.js --network optimism
 
 # Deploy to Arbitrum
-PRIVATE_KEY=3491d9302cfdf85ce6725844e2586c61b026b264b16777c47bda69be65383ffb npx hardhat run scripts/deploy-v8.js --network arbitrum
+PRIVATE_KEY=YOUR_SECURE_PRIVATE_KEY_HERE npx hardhat run scripts/deploy-v8.js --network arbitrum
 
 # Deploy to Polygon
-PRIVATE_KEY=3491d9302cfdf85ce6725844e2586c61b026b264b16777c47bda69be65383ffb npx hardhat run scripts/deploy-v8.js --network polygon
+PRIVATE_KEY=YOUR_SECURE_PRIVATE_KEY_HERE npx hardhat run scripts/deploy-v8.js --network polygon
 ```
 
 ### Step 2: Update V8 Configuration

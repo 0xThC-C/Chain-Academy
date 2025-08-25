@@ -17,7 +17,7 @@ const CONTRACTS = {
 };
 
 // Sepolia RPC endpoint
-const RPC_URL = 'https://sepolia.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
+const RPC_URL = process.env.SEPOLIA_RPC_URL || 'https://sepolia.infura.io/v3/YOUR_API_KEY_HERE';
 
 // Test results storage
 const testResults = {
