@@ -94,7 +94,7 @@ npm test
 
 ### Arquivo .env
 ```bash
-PRIVATE_KEY=b50677655e339cb2d4504348dab2c6a6a3b5f5762508d9673fff4ffee40ddc94
+PRIVATE_KEY=[REDACTED_FOR_SECURITY]
 SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
 PLATFORM_FEE_RECIPIENT=0x85Fa7c0482F3e965099B8B564511c1D0f5e2b20c
 ```

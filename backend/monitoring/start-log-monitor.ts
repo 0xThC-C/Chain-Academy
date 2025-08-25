@@ -13,7 +13,7 @@ import * as dotenv from 'dotenv';
 // Load environment variables
 dotenv.config({ path: '../.env.v8' });
 
-const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || 'https://discord.com/api/webhooks/1406986268591525938/fPt_n2ITnBv8LDb7yT3ud0BS8t8CnHc8j8Ww6rM_PvnOlWsv9LsLY36d3bXRXD_WSVz7';
+const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || '';
 const BOT_WALLET = '0x4370772caa2B2FC8E372f242a6CAA0A8293Fb765';
 
 class V8LogMonitorService {
